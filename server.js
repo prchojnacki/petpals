@@ -25,8 +25,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(__dirname + '/client'));
-app.set('views', __dirname + '/client/views');
-app.set('view engine','ejs');
+// app.set('views', __dirname + '/client/views');
+// app.set('view engine','ejs');
 // bodyparser for handling post data
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -87,9 +87,9 @@ passport.use(new uberStrategy({
 ));
 
 // login page 
-app.get('/login', function (request, response) {
-	response.render('login');
-});
+// app.get('/login', function (request, response) {
+// 	response.render('login');
+// });
 
 // get request to start the whole oauth process with passport
 app.get('/auth/uber',
@@ -99,18 +99,24 @@ app.get('/auth/uber',
 );
 
 // authentication callback redirects to /login if authentication failed or home if successful
-app.get('/auth/uber/callback',
-	passport.authenticate('uber', {
-		failureRedirect: '/login'
-	}), function(req, res) {
-    res.redirect('/');
-  });
+// app.get('/auth/uber/callback',
+// 	passport.authenticate('uber', {
+// 		failureRedirect: '/login'
+// 	}), function(req, res) {
+//     res.redirect('/');
+//   });
 
 // home after the user is authenticated
-app.get('/', ensureAuthenticated, function (request, response) {
-	response.render('index');
+// app.get('/', ensureAuthenticated, function (request, response) {
+// 	response.render('index');
+// });
+app.get('/',function(req,res){
+  res.sendFile('index.html',{root: __dirname + '/client/'},function(err){
+    if(err){
+      res.status(err.status).end();
+    }
+  })
 });
-
 // /profile API endpoint
 app.get('/profile', ensureAuthenticated, function (request, response) {
 	getAuthorizedRequest('/v1/me', request.user.accessToken, function (error, res) {
