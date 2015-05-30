@@ -1,4 +1,8 @@
 <div ng-controller = 'mainController'>
 	<div id='location'></div>
-	<button class='btn btn-primary' ng-click = 'select()'>Select</button>
+	<div class='pet'>
+		<p>Distance: <span ng-bind = 'distance'></span> miles</p>
+		<p>Estimate to Uber: <span ng-bind = 'price'></span></p>
+		<button class='btn btn-primary' ng-click = 'select()'>Select</button>
+	</div>
 </div>
