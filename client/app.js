@@ -2,20 +2,23 @@
 document.documentElement.classList.remove('no-js');
 
 //Beginning Angular
-var petPals = angular.module('petPals',['ngRoute']);
-
-petPals.config(function ($routeProvider) {
+var petPals = angular.module('petPals',['ngRoute'])
+.config(function ($routeProvider) {
 	$routeProvider
 	.when('/',{
+		controller: 'welcomeController',
 		templateUrl: './views/partials/welcome.html'
 	})
 	.when('/main',{
+		controller: 'mainController',
 		templateUrl: './views/partials/main.html'
 	})
 	.when('/pet',{
+		controller: 'petController',
 		templateUrl: './views/partials/pet.html'
 	})
 	.when('/finished',{
+		controller: 'finishedController',
 		templateUrl: './views/partials/finished.html'
 	})
 	.otherwise({

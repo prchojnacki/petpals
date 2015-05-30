@@ -8,7 +8,7 @@ var https = require('https');
 var bodyParser = require('body-parser');
 var app = express();
 var config = require('./config.js');
-// var petfinder = require('./petfinder.js')
+var petfinder = require('./petfinder.js');
 // Get all auth stuff from config file
 // ClientID & ClientSecret for API requests with OAUTH
 var clientID = config.ClientID;
@@ -65,7 +65,7 @@ function getRequest(endpoint, callback) {
     }
   }
   // console.log('options', options);
- 
+
   var req = https.request(options, function(res) {
     console.log('in req');
     var fullRes = ""
@@ -79,7 +79,7 @@ function getRequest(endpoint, callback) {
       console.log("fullRes", fullRes);
       callback(null, JSON.parse(fullRes));
     })
-    
+
   });
   req.end();
 

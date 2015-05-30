@@ -1,0 +1,44 @@
+// Importing from Bootstrap
+@import (reference) 'variables';
+@import (reference) 'mixins';
+
+body {
+	background: #eee url('http://localhost:8000/assets/img/paisley.png') repeat;
+}
+#welcome {
+	.make-xs-column(12);
+    height: 100vh;
+    background-image: url(https://38.media.tumblr.com/tumblr_m7yuqbQZT91qgawlzo1_500.gif);
+    background-repeat: no-repeat;
+    text-align: center;
+    color: @brand-primary;
+    background-size: 100% 100%;
+    padding: 12.5% 0; 
+    h1,h2 {
+    	font-weight: bold;
+    }
+}
+#pet-confirm {
+	.make-xs-column(12);
+	.make-sm-column(10);
+	.make-sm-column-offset(1);
+	.make-md-column(8);
+	.make-md-column-offset(2);
+	.jumbotron {
+		background: @state-success-bg;
+		hr {
+			border-color: @state-success-border;
+		}
+		img {
+			margin: 0 auto;
+		}
+	}
+}
+#finished {
+	.make-xs-column(12);
+	.make-sm-column(10);
+	.make-sm-column-offset(1);
+	.make-md-column(8);
+	.make-md-column-offset(2);
+	text-align: center;
+}
