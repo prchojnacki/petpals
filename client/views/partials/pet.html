@@ -1,2 +1,20 @@
-	<button class='btn btn-primary' ng-click = 'goBack()'>Go back</button>
-	<button class='btn btn-primary' ng-click = 'request()'>Request this pet</button>
+<div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2 text-center">
+	<h1>Confirm Pet</h1>
+	<div class="jumbotron">
+		<img class="img-responsive" src="">
+		<p>Name: <span class="text-info" ng-bind=""></span></p>
+		<p>Age: <span class="text-info" ng-bind=""></span></p>
+		<p>Breed: <span class="text-info" ng-bind=""></span></p>
+		<hr>
+		<p>Distance: <span class="text-danger" ng-bind=""></span></p>
+		<p>Cost: $<span class="text-danger" ng-bind=""></span></p>
+	</div>
+	<div class="row">
+		<div class="col-xs-6 col-sm-4">
+			<a class='text-danger' ng-click='goBack()'><span class="glyphicon glyphicon-arrow-left"></span> Go back</a>
+		</div>
+		<div class="col-xs-6 col-sm-4 col-sm-offset-4">
+			<button class='btn btn-primary' ng-click = 'request()'>Request this pet</button>
+		</div>
+	</div>
+</div>
