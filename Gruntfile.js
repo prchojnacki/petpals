@@ -14,7 +14,8 @@ module.exports = function(grunt){
       	  compress: true
       	},
       	files: {
-      	  './client/assets/css/bootstrap.min.css': './client/assets/less/bootstrap.less'
+      	  './client/assets/css/bootstrap.min.css': './client/assets/less/bootstrap.less',
+          './client/assets/css/styles.min.css':'./client/assets/less/styles.less'
       	}
       }
     },
