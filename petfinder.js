@@ -1,14 +1,6 @@
-var express = require('express');
-var session = require('express-session');
-var passport = require('passport');
-var https = require('https');
-var bodyParser = require('body-parser');
-var app = express();
 var config = require('./config.js');
 var MD5 = require('MD5');
-
 var secret = config.petfinderSecret;
-
 var http = require("http");
 var url = require("url");
 var _ = require('underscore');
