@@ -1,8 +1,159 @@
-<div ng-controller = 'mainController'>
+<div id="search" class="col-xs-12">
 	<div id='location'></div>
-	<div class='pet'>
-		<p>Distance: <span ng-bind = 'distance'></span> miles</p>
-		<p>Estimate to Uber: <span ng-bind = 'price'></span></p>
-		<button class='btn btn-primary' ng-click = 'select()'>Select</button>
+	<div id="searchbar">
+		<h3>Search By</h3>
+		<form class="form-horizontal">
+			<div class="form-group">
+				<label class="col-xs-12 col-sm-6 col-md-3">Type
+				<input type="text" class="form-control"></label>
+				<label class="col-xs-12 col-sm-6 col-md-3">Breed
+				<input type="text" class="form-control"></label>
+				<label class="col-xs-12 col-sm-6 col-md-3">Age
+				<input type="text" class="form-control"></label>
+				<label class="col-xs-12 col-sm-6 col-md-3">Gender
+				<input type="text" class="form-control"></label>
+			</div>
+			<div class="form-group">
+			<label class="col-xs-12">Filters</label>
+				<label class="col-xs-12 col-sm-4">Characteristics
+					<div class="btn-group" style="width: 100%">
+						<button class="btn btn-default">House Trained</button>
+						<button class="btn btn-default">Declawed</button>
+						<button class="btn btn-default">Special Needs</button>
+					</div>
+				</label>
+				<label class="col-xs-12 col-sm-4">Size
+					<div class="btn-group" style="width: 100%">
+						<button class="btn btn-default">Small</button>
+						<button class="btn btn-default">Medium</button>
+						<button class="btn btn-default">Large</button>
+						<button class="btn btn-default">Extra Large</button>
+					</div>
+				</label>
+				<label class="col-xs-12 col-sm-4">My Household Has
+					<div class="btn-group" style="width: 100%">
+						<button class="btn btn-default">Cats</button>
+						<button class="btn btn-default">Dogs</button>
+						<button class="btn btn-default">Young Children</button>
+					</div>
+				</label>
+			</div>
+		</form>
+	</div><!-- /#searbar -->
+	<div id="results" class="row">
+		<div class='pet media col-xs-6 col-sm-3'>
+			<div class="media-left">
+				<a><img class="img-responsive media-object" src=""></a>
+			</div>
+			<div class="media-body">
+				<h4 class="media-head">Pet Name Here</h4>
+				<p>Distance: <span ng-bind='distance'></span> miles</p>
+				<p>Estimate to Uber: <span ng-bind='price'></span></p>
+				<button class='btn btn-primary' ng-click='select()'>Select</button>
+			</div>
+		</div>
+		<div class='pet media col-xs-6 col-sm-3'>
+			<div class="media-left">
+				<a><img class="img-responsive media-object" src=""></a>
+			</div>
+			<div class="media-body">
+				<h4 class="media-head">Pet Name Here</h4>
+				<p>Distance: <span ng-bind='distance'></span> miles</p>
+				<p>Estimate to Uber: <span ng-bind='price'></span></p>
+				<button class='btn btn-primary' ng-click='select()'>Select</button>
+			</div>
+		</div>
+		<div class='pet media col-xs-6 col-sm-3'>
+			<div class="media-left">
+				<a><img class="img-responsive media-object" src=""></a>
+			</div>
+			<div class="media-body">
+				<h4 class="media-head">Pet Name Here</h4>
+				<p>Distance: <span ng-bind='distance'></span> miles</p>
+				<p>Estimate to Uber: <span ng-bind='price'></span></p>
+				<button class='btn btn-primary' ng-click='select()'>Select</button>
+			</div>
+		</div>
+		<div class='pet media col-xs-6 col-sm-3'>
+			<div class="media-left">
+				<a><img class="img-responsive media-object" src=""></a>
+			</div>
+			<div class="media-body">
+				<h4 class="media-head">Pet Name Here</h4>
+				<p>Distance: <span ng-bind='distance'></span> miles</p>
+				<p>Estimate to Uber: <span ng-bind='price'></span></p>
+				<button class='btn btn-primary' ng-click='select()'>Select</button>
+			</div>
+		</div>
+		<div class='pet media col-xs-6 col-sm-3'>
+			<div class="media-left">
+				<a><img class="img-responsive media-object" src=""></a>
+			</div>
+			<div class="media-body">
+				<h4 class="media-head">Pet Name Here</h4>
+				<p>Distance: <span ng-bind='distance'></span> miles</p>
+				<p>Estimate to Uber: <span ng-bind='price'></span></p>
+				<button class='btn btn-primary' ng-click='select()'>Select</button>
+			</div>
+		</div>
+		<div class='pet media col-xs-6 col-sm-3'>
+			<div class="media-left">
+				<a><img class="img-responsive media-object" src=""></a>
+			</div>
+			<div class="media-body">
+				<h4 class="media-head">Pet Name Here</h4>
+				<p>Distance: <span ng-bind='distance'></span> miles</p>
+				<p>Estimate to Uber: <span ng-bind='price'></span></p>
+				<button class='btn btn-primary' ng-click='select()'>Select</button>
+			</div>
+		</div>
+		<div class='pet media col-xs-6 col-sm-3'>
+			<div class="media-left">
+				<a><img class="img-responsive media-object" src=""></a>
+			</div>
+			<div class="media-body">
+				<h4 class="media-head">Pet Name Here</h4>
+				<p>Distance: <span ng-bind='distance'></span> miles</p>
+				<p>Estimate to Uber: <span ng-bind='price'></span></p>
+				<button class='btn btn-primary' ng-click='select()'>Select</button>
+			</div>
+		</div>
+		<div class='pet media col-xs-6 col-sm-3'>
+			<div class="media-left">
+				<a><img class="img-responsive media-object" src=""></a>
+			</div>
+			<div class="media-body">
+				<h4 class="media-head">Pet Name Here</h4>
+				<p>Distance: <span ng-bind='distance'></span> miles</p>
+				<p>Estimate to Uber: <span ng-bind='price'></span></p>
+				<button class='btn btn-primary' ng-click='select()'>Select</button>
+			</div>
+		</div>
+	</div><!-- /#results -->
+</div>
+<!-- Begin Modal HTML code -->
+<div id="confirmation" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Confirm Pet</h4>
+			</div>
+			<div class="modal-body">
+				<img class="img-responsive" src="" ng-src="">
+				<p>Name: <span class="text-info" ng-bind=""></span></p>
+				<p>Age: <span class="text-info" ng-bind=""></span></p>
+				<p>Breed: <span class="text-info" ng-bind=""></span></p>
+				<p>Description: <span class="text-info" ng-bind=""></span></p>
+				<hr>
+				<p>Distance: <span class="text-danger" ng-bind=""></span></p>
+				<p>Cost: $<span class="text-danger" ng-bind=""></span></p>
+			</div>
+			<div class="modal-footer">
+				<a class='text-danger' data-dismiss="modal"><span class="glyphicon glyphicon-arrow-left"></span> Go back</a>
+				<button class='btn btn-primary' ng-click='request()'>Request this pet</button>
+			</div>
+		</div>
 	</div>
 </div>
+<!-- End Modal HTML Code -->
