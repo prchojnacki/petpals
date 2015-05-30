@@ -8,6 +8,7 @@ var https = require('https');
 var bodyParser = require('body-parser');
 var app = express();
 var config = require('./config.js');
+// var petfinder = require('petfinder.js')
 // Get all auth stuff from config file
 // ClientID & ClientSecret for API requests with OAUTH
 var clientID = config.ClientID;
@@ -15,7 +16,7 @@ var clientSecret = config.ClientSecret;
 // ServerID for API requests without OAUTH
 var ServerID = config.ServerID;
 // sessionSecret used by passport
-var sessionSecret = "UBERAPIROCKS" 
+var sessionSecret = "UBERAPIROCKS"
 
 app.use(session({
 	secret: sessionSecret,
@@ -35,15 +36,15 @@ app.use(bodyParser.json());
 app.post('/cars', function(request, response) {
   getRequest('/v1/products?latitude='+request.body.start_latitude+'&longitude='+request.body.start_longitude, function(err, res) {
     response.json(res);
-  })
-})
+  });
+});
 
 app.post('/price', function (request, response) {
   console.log('request.body',request.body);
   getRequest('/v1/estimates/price?start_latitude='+request.body.start_latitude+'&start_longitude='+request.body.start_longitude+'&end_latitude='+request.body.end_latitude+'&end_longitude='+request.body.end_longitude, function (err, res) {
     if(err) {
       console.log('err',err);
-      console.log(res);
+      console.log('res', res);
     }
     else {
       response.json(res);
@@ -59,21 +60,32 @@ function getRequest(endpoint, callback) {
     path: endpoint,
     method: "GET",
     headers: {
+      'Content-Type': 'application/json',
       Authorization: "Token " + ServerID
     }
   }
+  // console.log('options', options);
+ 
   var req = https.request(options, function(res) {
-    res.on('data', function(data) {
-      console.log('data!', data);
-      console.log(JSON.parse(data));
-      callback(null, JSON.parse(data));
+    console.log('in req');
+    var fullRes = ""
+    res.setEncoding('utf8');
+    res.on('readable', function() {
+      var chunk = this.read() || '';
+      fullRes += chunk;
+      console.log('chunk: ' + Buffer.byteLength(chunk) + ' bytes')
+    });
+    res.on('end', function() {
+      console.log("fullRes", fullRes);
+      callback(null, JSON.parse(fullRes));
     })
-  })
-  req.on('error', function(err) {
-    callback(err, null);
+    
   });
   req.end();
 
+  req.on('error', function(err) {
+    callback(err, null);
+  });
 }
 
 // _______________ BEGIN PASSPORT STUFF ________________
@@ -101,7 +113,7 @@ passport.use(new uberStrategy({
 	}
 ));
 
-// login page 
+// login page
 // app.get('/login', function (request, response) {
 // 	response.render('login');
 // });

@@ -59,7 +59,7 @@ petPals.factory('petFactory', function ($http) {
 		console.log(userLongitude);
 		$http.post('/price', {start_latitude: startLatitude, start_longitude: startLongitude, end_latitude: userLatitude, end_longitude: userLongitude}).success(function (output) {
 			callback(output);
-		})
+		});
 	}
 
 	return factory;
