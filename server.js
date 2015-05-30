@@ -38,6 +38,19 @@ app.post('/cars', function(request, response) {
   })
 })
 
+app.post('/price', function (request, response) {
+  console.log('request.body',request.body);
+  getRequest('/v1/estimates/price?start_latitude='+request.body.start_latitude+'&start_longitude='+request.body.start_longitude+'&end_latitude='+request.body.end_latitude+'&end_longitude='+request.body.end_longitude, function (err, res) {
+    if(err) {
+      console.log('err',err);
+      console.log(res);
+    }
+    else {
+      response.json(res);
+    }
+  })
+})
+
 
 // use this for an api get request without oauth
 function getRequest(endpoint, callback) {
@@ -51,16 +64,18 @@ function getRequest(endpoint, callback) {
   }
   var req = https.request(options, function(res) {
     res.on('data', function(data) {
-      console.log('data!');
+      console.log('data!', data);
       console.log(JSON.parse(data));
       callback(null, JSON.parse(data));
     })
   })
-  req.end();
   req.on('error', function(err) {
     callback(err, null);
   });
+  req.end();
+
 }
+
 // _______________ BEGIN PASSPORT STUFF ________________
 // Serialize and deserialize users used by passport
 passport.serializeUser(function (user, done){
