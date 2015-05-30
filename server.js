@@ -8,6 +8,7 @@ var https = require('https');
 var bodyParser = require('body-parser');
 var app = express();
 var config = require('./config.js');
+var petfinder = require('petfinder.js')
 // Get all auth stuff from config file
 // ClientID & ClientSecret for API requests with OAUTH
 var clientID = config.ClientID;
@@ -15,7 +16,7 @@ var clientSecret = config.ClientSecret;
 // ServerID for API requests without OAUTH
 var ServerID = config.ServerID;
 // sessionSecret used by passport
-var sessionSecret = "UBERAPIROCKS" 
+var sessionSecret = "UBERAPIROCKS"
 
 app.use(session({
 	secret: sessionSecret,
@@ -35,8 +36,8 @@ app.use(bodyParser.json());
 app.post('/cars', function(request, response) {
   getRequest('/v1/products?latitude='+request.body.start_latitude+'&longitude='+request.body.start_longitude, function(err, res) {
     response.json(res);
-  })
-})
+  });
+});
 
 
 // use this for an api get request without oauth
@@ -86,7 +87,7 @@ passport.use(new uberStrategy({
 	}
 ));
 
-// login page 
+// login page
 // app.get('/login', function (request, response) {
 // 	response.render('login');
 // });

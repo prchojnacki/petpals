@@ -1,10 +1,11 @@
 {
   "name": "Uber_API_Node",
   "version": "0.0.1",
-  "description": "Starter Kit for using the Uber API with Node.js and Express.js",
+  "description": "Starter Kit for using the Uber API with Node and Express",
   "author": "Ketul 'Jay' Patel",
   "license": "MIT",
   "dependencies": {
+    "MD5": "^1.2.2",
     "body-parser": "^1.12.4",
     "express": "^4.12.4",
     "express-session": "^1.11.2",
