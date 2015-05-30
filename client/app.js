@@ -24,7 +24,7 @@ petPals.config(function ($routeProvider) {
 });
 
 //Place Factories here
-petPals.factory('petFactory', function ($http) {
+petPals.factory('petFactory', function ($http, $window) {
 	var factory = {};
 	var userLatitude;
 	var userLongitude;
@@ -64,12 +64,23 @@ petPals.factory('petFactory', function ($http) {
 	}
 
 	factory.request = function (callback) {
-		$http.get('/auth/uber').success(function (output) {
-			console.log('authenticationoutput',output);
-		})
-		$http.post('/request', {start_latitude: startLatitude, start_longitude: startLongitude, end_latitude: userLatitude, end_longitude: userLongitude}).success(function (rideoutput) {
-			callback(rideoutput);
-		})
+		//$window.location.assign('/auth/uber');
+		// $http.get('/auth/uber').success(function (output) {
+		// 	console.log('authenticationoutput',output);
+		// })
+ 		$http.get('/auth/isAuthenticated').success(function (output) {
+ 			if (output == true) {
+ 				console.log("WOOOT");
+ 				$http.post('/request', {start_latitude: startLatitude, start_longitude: startLongitude, end_latitude: userLatitude, end_longitude: userLongitude}).success(function (rideoutput) {
+					callback(rideoutput);
+				})
+ 			} else {
+ 				$window.location.assign('/auth/uber');
+ 			}
+ 		});
+		// 	console.log('authenticationoutput',output);
+		// })
+		
 	}
 
 	return factory;
