@@ -6,7 +6,7 @@ var petPals = angular.module('petPals',['ngRoute'])
 .config(function ($routeProvider) {
 	$routeProvider
 	.when('/',{
-		controller: 'welcomeController'
+		controller: 'welcomeController',
 		templateUrl: './views/partials/welcome.html'
 	})
 	.when('/main',{
