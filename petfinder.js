@@ -66,7 +66,9 @@ function Petfinder () {
       var photos = [];
       var options = [];
       for(var i in pet.media.photos.photo){
-        photos.push(pet.media.photos.photo[i].$t);
+      	if (pet.media.photos.photo[i]['@size'] == 'x') {
+      		photos.push(pet.media.photos.photo[i].$t);
+      	}
       }
       for(i in pet.options.option){
         options.push(pet.options.option[i]);
@@ -101,9 +103,11 @@ function Petfinder () {
       });
     },
     clean: function(shelter){
+    	console.log("shelter:", shelter);
       return {
         longitude: shelter.longitude.$t,
-        latitude: shelter.latitude.$t
+        latitude: shelter.latitude.$t,
+        id: shelter.id.$t
       };
     }
   };
