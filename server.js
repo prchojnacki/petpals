@@ -132,7 +132,7 @@ app.get('/auth/uber',
 // authentication callback redirects to /login if authentication failed or home if successful
 app.get('/auth/uber/callback',
 	passport.authenticate('uber', {
-		failureRedirect: '/'
+		failureRedirect: '/#/pet'
 	}), function(req, res) {
     res.redirect('/#/pet');
   });

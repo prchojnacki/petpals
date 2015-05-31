@@ -26,13 +26,13 @@ var petPals = angular.module('petPals',['ngRoute'])
 	})
 });
 
-//Place Factories here
+//Factories
 petPals.factory('petFactory', function ($http, $window) {
 	var factory = {};
 	var userLatitude;
 	var userLongitude;
-	var startLatitude = 37.294381;
-	var startLongitude = -121.850196;
+	var ride;
+	var selectedPetName;
 
 	var locationDiv = document.getElementById('location');
 
@@ -59,37 +59,43 @@ petPals.factory('petFactory', function ($http, $window) {
 	}
 
 	factory.getPrice = function (callback) {
-		console.log(userLatitude);
-		console.log(userLongitude);
-		$http.post('/price', {start_latitude: startLatitude, start_longitude: startLongitude, end_latitude: userLatitude, end_longitude: userLongitude}).success(function (output) {
+		//get and set pets
+		for (pet in pets) {
+			//get shelter ID
+			//get shelter location - set endLatitude/endLongitude
+			var endLatitude = 37.294381;
+			var endLongitude = -121.850196;
+			$http.post('/price', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: endLatitude, end_longitude: endLongitude}).success(function (output) {
+				pets[pet].price = price.prices[0].estimate;
+				pets[pet].distance = price.prices[0].distance;
+			});
 			callback(output);
-		});
+		}
 	}
 
 	factory.request = function (callback) {
-		//$window.location.assign('/auth/uber');
-		// $http.get('/auth/uber').success(function (output) {
-		// 	console.log('authenticationoutput',output);
-		// })
  		$http.get('/auth/isAuthenticated').success(function (output) {
  			if (output == true) {
  				console.log("WOOOT");
  				$http.post('/request', {start_latitude: startLatitude, start_longitude: startLongitude, end_latitude: userLatitude, end_longitude: userLongitude}).success(function (rideoutput) {
-					callback(rideoutput);
+ 					ride = rideoutput;
+ 					//set pet's name selectedPetName = 
+					callback(rideoutput, selectedPetName);
 				})
  			} else {
  				$window.location.assign('/auth/uber');
  			}
- 		});
-		// 	console.log('authenticationoutput',output);
-		// })
-		
+ 		});		
+	}
+
+	factory.getRide = function (callback) {
+		callback(ride);
 	}
 
 	return factory;
 })
 
-//Place Controllers here
+//Controllers
 petPals.controller('welcomeController', function ($scope, petFactory, $window) {
 	$scope.search = function () {
 		$window.location.assign('#/main')
@@ -99,36 +105,23 @@ petPals.controller('welcomeController', function ($scope, petFactory, $window) {
 petPals.controller('mainController', function ($scope, petFactory, $window) {
 	petFactory.getLocation(function (data) {
 		$scope.location = data;
-		console.log('got location!');
-		petFactory.getPrice(function (price) {
-			console.log(price);
-			$scope.price = price.prices[0].estimate;
-			$scope.distance = price.prices[0].distance;
-		})
 	})
 
 	$scope.select = function () {
-		$window.location.assign('#/pet');
-	}
-})
-
-petPals.controller('petController', function ($scope, petFactory, $window) {
-	petFactory.getLocation(function (data) {
-		$scope.location = data;
-	})
-
-	$scope.goBack = function () {
-		$window.location.assign('#/main')
+		//add pet information to $scope
 	}
 
 	$scope.request = function () {
 		petFactory.request(function (data) {
 			console.log('rideoutput',data);
+			$window.location.assign('#/finished');
 		})
-		// $window.location.assign('#/finished')
 	}
 })
 
 petPals.controller('finishedController', function ($scope, petFactory, $window) {
-
+	petFactory.getRide(function (ride, pet_name) {
+		$scope.eta = ride.eta;
+		$scope.pet_name = pet_name;
+	})
 })
