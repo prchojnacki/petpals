@@ -26,13 +26,16 @@ var petPals = angular.module('petPals',['ngRoute'])
 	})
 });
 
-//Place Factories here
+//Factories
 petPals.factory('petFactory', function ($http, $window) {
 	var factory = {};
 	var userLatitude;
 	var userLongitude;
-	var startLatitude = 37.294381;
-	var startLongitude = -121.850196;
+	var ride;
+	var selectedPetName;
+	var selectedPet;
+	var pets;
+	var shelters = [];
 
 	var locationDiv = document.getElementById('location');
 
@@ -58,53 +61,76 @@ petPals.factory('petFactory', function ($http, $window) {
 		}
 	};
 
-	factory.getPrice = function (callback) {
-		console.log(userLatitude);
-		console.log(userLongitude);
-		$http.post('/price', { start_latitude: startLatitude, start_longitude: startLongitude, end_latitude: userLatitude, end_longitude: userLongitude}).success(function (output) {
-			callback(output);
-		});
-	};
-
 	factory.getPets = function (callback) {
+		//get and set pets
 		var data = { "animal": "dog", "location": "94022", "age" : "senior", "count" : "3" };
 		$http({ url: '/petfinder/pets', method: 'GET', params: data }).success(function (output) {
-			console.log("OUTPUT IN getPets FACTORY METHOD", output);
-			callback(output);
+			pets = output;
+			var temp = [];
+			var count = 0;
+			for (pet in output) {
+				// if (temp.output[pet].shelterId==-1) {
+					temp.push(output[pet].shelterId);
+					var data = {"id":output[pet].shelterId};
+					$http({ url: '/petfinder/shelters', method: 'GET', params: data }).success(function (petfinderShelter) {
+						var endLatitude = petfinderShelter.petfinder.shelter.latitude.$t;
+				    	var endLongitude = petfinderShelter.petfinder.shelter.longitude.$t;
+				        var SID = petfinderShelter.petfinder.shelter.id.$t;
+				        $http.post('/price', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: endLatitude, end_longitude: endLongitude}).success(function (uberPrice) {
+				        	p = uberPrice.prices[0].estimate;
+				        	d = uberPrice.prices[0].distance;
+							shelters.push({shelterId: SID, price: p, distance: d});
+							count ++;
+							if(count==pets.length-1) {
+								callback(shelters, pets);
+							}
+						});
+				    });
+				// }
+				// else {
+				// 	count ++;
+
+				// }
+				// if(count == pets.length-1) {
+				// 	console.log(shelters);
+				// 	callback(shelters, pets);
+				// }
+			}
 		});
 	};
 
-	factory.getShelter = function (data, callback) {
-		$http({ url: '/petfinder/pets', method: 'GET', params: data }).success(function (output) {
-			console.log("OUTPUT IN GET SHELTERS FACTORY METHOD", output);
-			callback(output);
-		});
+	factory.selectPet = function (id, callback) {
+		for (pet in pets) {
+			if(pets[pet].id == id) {
+				selectedPet = pets[pet]
+			}
+		}
+		callback(selectedPet);
 	}
 
 	factory.request = function (callback) {
-		//$window.location.assign('/auth/uber');
-		// $http.get('/auth/uber').success(function (output) {
-		// 	console.log('authenticationoutput',output);
-		// })
  		$http.get('/auth/isAuthenticated').success(function (output) {
  			if (output == true) {
  				console.log("WOOOT");
  				$http.post('/request', {start_latitude: startLatitude, start_longitude: startLongitude, end_latitude: userLatitude, end_longitude: userLongitude}).success(function (rideoutput) {
-					callback(rideoutput);
+ 					ride = rideoutput;
+ 					//set pet's name selectedPetName = 
+					callback(rideoutput, selectedPetName);
 				})
  			} else {
  				$window.location.assign('/auth/uber');
  			}
- 		});
-		// 	console.log('authenticationoutput',output);
-		// })
+ 		});		
+	}
 
+	factory.getRide = function (callback) {
+		callback(ride, selectedPetName);
 	}
 
 	return factory;
 });
 
-//Place Controllers here
+//Controllers
 petPals.controller('welcomeController', function ($scope, petFactory, $window) {
 	$scope.search = function () {
 		$window.location.assign('#/main');
@@ -113,62 +139,42 @@ petPals.controller('welcomeController', function ($scope, petFactory, $window) {
 
 petPals.controller('mainController', function ($scope, petFactory, $window) {
 
-	var ex_options = { "query": { "animal": "dog", "location": "94022", "age" : "senior", "count" : "2" }};
-
-	petFactory.getPets(function (output) {
-		$scope.pets = output;
-		var shelterIds = [];
-
-		for (var i = 0; i < $scope.pets.length; i++) {
-			if (! shelterIds.includes($scope.pets[i].shelterId)) {
-				shelterIds.push($scope.pets[i].shelterId);
+	petFactory.getLocation(function (data) {
+		$scope.location = data;
+		petFactory.getPets (function (shelters, pets) {
+			$scope.shelters = shelters;
+			$scope.pets = pets;
+			for (var i = 0; i < $scope.pets.length; i++) {
+				for (var j = 0; j < $scope.shelters.length; j++) {
+					if ($scope.pets[i].shelterId == $scope.shelters[j].shelterId) {
+						$scope.pets[i].price = $scope.shelters[j].price;
+						$scope.pets[i].distance = $scope.shelters[j].distance;
+					} else {
+						continue;
+					}
+				}
 			}
-		};
-
-		for (var j = 0; j < shelterIds.length; j++) {
-			petFactory.getLocation(function (data) {
-				$scope.location = data;
-				console.log('got location!');
-			});
-		};
-
-		console.log("\n","SCOPE.PETS",$scope.pets);
-	});
-
-	petFactory.getLocation(function (data) {
-		$scope.location = data;
-		console.log('got location!');
-	});
-
-	petFactory.getPrice(function (price) {
-		console.log(price);
-		$scope.price = price.prices[0].estimate;
-		$scope.distance = price.prices[0].distance;
-	});
-
-	$scope.select = function () {
-		$window.location.assign('#/pet');
-	};
-
-});
-
-petPals.controller('petController', function ($scope, petFactory, $window) {
-	petFactory.getLocation(function (data) {
-		$scope.location = data;
+		})
 	})
 
-	$scope.goBack = function () {
-		$window.location.assign('#/main')
+	$scope.select = function (id) {
+		//add pet information to $scope
+		petFactory.selectPet(id, function (pet) {
+			$scope.selectedPet = pet;
+		})
 	}
 
 	$scope.request = function () {
 		petFactory.request(function (data) {
 			console.log('rideoutput',data);
+			$window.location.assign('#/finished');
 		})
-		// $window.location.assign('#/finished')
 	}
 })
 
 petPals.controller('finishedController', function ($scope, petFactory, $window) {
-
+	petFactory.getRide(function (ride, pet_name) {
+		$scope.eta = ride.eta;
+		$scope.pet_name = pet_name;
+	})
 })

@@ -46,7 +46,7 @@ function Petfinder () {
 
   self.pet = {
     find: function (req, res) {
-      var new_query = self.options(req);
+      var new_query = self.options({query: req.query});
       _.extend(new_query, { "pathname": "/pet.find" });
       var all_pets = [];
       self.getRequest(new_query, function (results) {
@@ -54,8 +54,8 @@ function Petfinder () {
           var new_pet = self.pet.clean(results.petfinder.pets.pet[i]);
           all_pets.push(new_pet);
         };
+        res.json(all_pets);
       });
-      res.json(all_pets);
     },
     get: function (opts, callback) {
       var options = self.options(opts);
@@ -127,4 +127,3 @@ module.exports = new Petfinder();
 //   // console.log('PET BY ID', data);
 //   return data;
 // });
-// end of file

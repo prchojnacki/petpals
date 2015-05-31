@@ -6,6 +6,9 @@ module.exports = function(app) {
     petfinder.pet.find(req,res);
   });
   app.get('/petfinder/shelters', function (req, res) {
-    petfinder.shelter.get(req, res);
+  petfinder.shelter.get(req.query.id, function(shelter){
+  	console.log(shelter);
+    res.json(shelter);
   });
+});
 };
