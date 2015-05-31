@@ -13,20 +13,7 @@ app.use(bodyParser.json());
 var config = require('./config.js');
 var petfinder = require('./petfinder.js');
 
-app.get('/petfinder/pets', function (req, res) {
-  //console.log("REQ PARAMS", req.query);
-  petfinder.pet.find(req,res);
-});
-
-app.get('/petfinder/shelters', function (req, res) {
-  console.log("SHELTER PARAMS", req.query);
-  petfinder.shelter.get(req.query.id, function(shelter){
-    //console.log("THE SHELTER", shelter);
-    res.json(shelter);
-  });
-});
-// var routes = require('./routes.js')(app);
-// Get all auth stuff from config file
+require('./routes.js')(app);
 // ClientID & ClientSecret for API requests with OAUTH
 var clientID = config.ClientID;
 var clientSecret = config.ClientSecret;
@@ -43,10 +30,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(__dirname + '/client'));
-// app.set('views', __dirname + '/client/views');
-// app.set('view engine','ejs');
-// bodyparser for handling post data
-
 
 // post to show unauthorized request
 app.post('/cars', function(request, response) {
@@ -80,10 +63,8 @@ function getRequest(endpoint, callback) {
       Authorization: "Token " + ServerID
     }
   }
-  // console.log('options', options);
 
   var req = https.request(options, function(res) {
-    // console.log('in req');
     var fullRes = ""
     res.setEncoding('utf8');
     res.on('readable', function() {
@@ -92,7 +73,6 @@ function getRequest(endpoint, callback) {
       console.log('chunk: ' + Buffer.byteLength(chunk) + ' bytes')
     });
     res.on('end', function() {
-      // console.log("fullRes", fullRes);
       callback(null, JSON.parse(fullRes));
     });
 
@@ -148,7 +128,7 @@ app.get('/auth/uber',
 // authentication callback redirects to /login if authentication failed or home if successful
 app.get('/auth/uber/callback',
 	passport.authenticate('uber', {
-		failureRedirect: '/#/pet'
+		failureRedirect: '/'
 	}), function(req, res) {
     res.redirect('/#/pet');
   });
