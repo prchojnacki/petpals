@@ -103,7 +103,6 @@ function Petfinder () {
       });
     },
     clean: function(shelter){
-    	console.log("shelter:", shelter);
       return {
         longitude: shelter.longitude.$t,
         latitude: shelter.latitude.$t,

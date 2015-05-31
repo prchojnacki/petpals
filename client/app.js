@@ -13,10 +13,10 @@ var petPals = angular.module('petPals',['ngRoute'])
 		controller: 'mainController',
 		templateUrl: './views/partials/main.html'
 	})
-	.when('/pet',{
-		controller: 'petController',
-		templateUrl: './views/partials/pet.html'
-	})
+	// .when('/pet',{
+	// 	controller: 'petController',
+	// 	templateUrl: './views/partials/pet.html'
+	// })
 	.when('/finished',{
 		controller: 'finishedController',
 		templateUrl: './views/partials/finished.html'
@@ -108,22 +108,27 @@ petPals.factory('petFactory', function ($http, $window) {
 	};
 
 	factory.request = function (pet, callback) {
+		requestedPet = pet;
  		$http.get('/auth/isAuthenticated').success(function (output) {
+ 			console.log('came back',output);
  			if (output == true) {
  				console.log("WOOOT");
  				$http.post('/request', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: pet.latitude, end_longitude: pet.longitude}).success(function (rideoutput) {
+ 					console.log('in factory:',rideoutput);
  					ride = rideoutput;
- 					requestedPet = pet;
 					callback(rideoutput);
 				})
  			} else {
+ 				console.log('hi');
+ 				// $http.get('/auth/uber/callback');
  				$window.location.assign('/auth/uber');
  			}
  		});
 	}
 
 	factory.getRide = function (callback) {
-		callback(ride, selectedPetName);
+		console.log("getRide", ride, requestedPet);
+		callback(ride, requestedPet);
 	}
 
 	return factory;
@@ -149,6 +154,8 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 					if ($scope.pets[i].shelterId == $scope.shelters[j].shelterId) {
 						$scope.pets[i].price = $scope.shelters[j].price;
 						$scope.pets[i].distance = $scope.shelters[j].distance;
+						$scope.pets[i].latitude = $scope.shelters[j].latitude;
+						$scope.pets[i].longitude = $scope.shelters[j].longitude;
 					} else {
 						continue;
 					}
@@ -187,15 +194,15 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 
 	$scope.request = function () {
 		petFactory.request($scope.selectedPet, function (data) {
-			console.log('rideoutput',data);
 			$window.location.assign('#/finished');
 		})
 	}
 })
 
 petPals.controller('finishedController', function ($scope, petFactory, $window) {
-	petFactory.getRide(function (ride, pet_name) {
+	petFactory.getRide(function (ride, pet) {
+		console.log('returned getRide',ride, pet)
 		$scope.eta = ride.eta;
-		$scope.pet_name = pet_name;
+		$scope.pet = pet;
 	})
 })
