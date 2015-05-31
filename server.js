@@ -126,20 +126,24 @@ passport.use(new uberStrategy({
 // 	response.render('login');
 // });
 
+app.get('/auth/isAuthenticated', function(req, res) {
+  res.send(req.isAuthenticated());
+});
+
 // get request to start the whole oauth process with passport
 app.get('/auth/uber',
-	passport.authenticate('uber',
-		{ scope: ['profile', 'history', 'history_lite', 'request', 'request_receipt'] }
-	)
+  passport.authenticate('uber',
+    { scope: ['profile', 'request'] }
+  )
 );
 
 // authentication callback redirects to /login if authentication failed or home if successful
-// app.get('/auth/uber/callback',
-// 	passport.authenticate('uber', {
-// 		failureRedirect: '/login'
-// 	}), function(req, res) {
-//     res.redirect('/');
-//   });
+app.get('/auth/uber/callback',
+	passport.authenticate('uber', {
+		failureRedirect: '/'
+	}), function(req, res) {
+    res.redirect('/#/pet');
+  });
 
 // home after the user is authenticated
 // app.get('/', ensureAuthenticated, function (request, response) {
@@ -187,18 +191,20 @@ app.post('/request', ensureAuthenticated, function (request, response) {
 });
 
 // logout
-app.get('/logout', function (request, response) {
-	request.logout();
-	response.redirect('/login');
-});
+// app.get('/logout', function (request, response) {
+// 	request.logout();
+// 	response.redirect('/login');
+// });
 
 // route middleware to make sure the request is from an authenticated user
 function ensureAuthenticated (request, response, next) {
   console.log('inside ensure Authenticated');
 	if (request.isAuthenticated()) {
+    console.log("Authenticated!");
 		return next();
 	}
-	response.redirect('/login');
+  console.log("Not? authenticated?");
+	response.redirect('/');
 }
 // use this for an api get request
 function getAuthorizedRequest(endpoint, accessToken, callback) {
