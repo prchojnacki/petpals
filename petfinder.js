@@ -82,12 +82,13 @@ function Petfinder () {
                         email: pet.contact.email.$t,
                         phone:pet.contact.phone.$t
                       },
-        description:  pet.description.$t,       
+        description:  pet.description.$t,
         name:         pet.name.$t,
         options:      [],
         photos:       [],
         sex:          pet.sex.$t,
         shelterId:    pet.shelterId.$t,
+        id:           pet.id.$t
       };
       for (var i = 0; i < pet.media.photos.photo.length; i++) {
         petObj.photos.push(pet.media.photos.photo[i].$t);

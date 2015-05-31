@@ -114,13 +114,13 @@ petPals.factory('petFactory', function ($http, $window) {
  				console.log("WOOOT");
  				$http.post('/request', {start_latitude: startLatitude, start_longitude: startLongitude, end_latitude: userLatitude, end_longitude: userLongitude}).success(function (rideoutput) {
  					ride = rideoutput;
- 					//set pet's name selectedPetName = 
+ 					//set pet's name selectedPetName =
 					callback(rideoutput, selectedPetName);
 				})
  			} else {
  				$window.location.assign('/auth/uber');
  			}
- 		});		
+ 		});
 	}
 
 	factory.getRide = function (callback) {
