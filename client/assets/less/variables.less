@@ -14,11 +14,11 @@
 @gray-light:             lighten(@gray-base, 46.7%); // #777
 @gray-lighter:           lighten(@gray-base, 93.5%); // #eee
 
-@brand-primary:         #CFA456;
-@brand-success:         #378475;
-@brand-info:            #ECC680;
-@brand-warning:         #415B89;
-@brand-danger:          #CF8656;
+@brand-primary:         #0E8E95;
+@brand-success:         #7EB026;
+@brand-info:            #043EB7;
+@brand-warning:         #D9B411;
+@brand-danger:          #DE4C0C;
 
 
 //== Scaffolding
@@ -26,7 +26,7 @@
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-@body-bg:               #FFEAC4;
+@body-bg:               desaturate(lighten(@brand-success,25%),50%);
 //** Global text color on `<body>`.
 @text-color:            @gray-dark;
 
@@ -46,7 +46,8 @@
 @font-family-serif:       Georgia, "Times New Roman", Times, serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
-@font-family-base:        @font-family-sans-serif;
+@font-family-custom:      'Osawld', sans-serif;
+@font-family-base:        @font-family-custom;
 
 @font-size-base:          14px;
 @font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
@@ -65,7 +66,9 @@
 @line-height-computed:    floor((@font-size-base * @line-height-base)); // ~20px
 
 //** By default, this inherits from the `<body>`.
-@headings-font-family:    inherit;
+// @headings-font-family:    inherit;
+@headings-font-family:    'Alfa Slab One', cursive;
+// @headings-font-family:    'Permanent Marker', cursive;
 @headings-font-weight:    500;
 @headings-line-height:    1.1;
 @headings-color:          inherit;
