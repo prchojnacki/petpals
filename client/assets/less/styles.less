@@ -18,20 +18,14 @@ body {
     	font-weight: bold;
     }
 }
-#pet-confirm {
-	.make-xs-column(12);
-	.make-sm-column(10);
-	.make-sm-column-offset(1);
-	.make-md-column(8);
-	.make-md-column-offset(2);
-	.jumbotron {
-		background: @state-success-bg;
-		hr {
-			border-color: @state-success-border;
-		}
-		img {
-			margin: 0 auto;
-		}
+#searchbar {
+	background-color: fadeout(@brand-success, 50%);
+	margin: -0.9375em  -0.9375em  0.9375em;
+	padding: 0.9375em;
+}
+#results {
+	.pet {
+		margin-top:1em;
 	}
 }
 #finished {

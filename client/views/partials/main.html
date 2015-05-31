@@ -141,6 +141,20 @@
 			</div>
 			<div class="modal-body">
 				<img class="img-responsive" src="" ng-src="">
+				<div class="row">
+					<div class="col-xs-6 col-sm-3">
+						<a class="thumbnail"><img></a>
+					</div>
+					<div class="col-xs-6 col-sm-3">
+						<a class="thumbnail"><img></a>
+					</div>
+					<div class="col-xs-6 col-sm-3">
+						<a class="thumbnail"><img></a>
+					</div>
+					<div class="col-xs-6 col-sm-3">
+						<a class="thumbnail"><img></a>
+					</div>
+				</div>
 				<p>Name: <span class="text-info" ng-bind=""></span></p>
 				<p>Age: <span class="text-info" ng-bind=""></span></p>
 				<p>Breed: <span class="text-info" ng-bind=""></span></p>
@@ -150,7 +164,7 @@
 				<p>Cost: $<span class="text-danger" ng-bind=""></span></p>
 			</div>
 			<div class="modal-footer">
-				<a class='text-danger' data-dismiss="modal"><span class="glyphicon glyphicon-arrow-left"></span> Go back</a>
+				<a class='text-danger pull-left' data-dismiss="modal">Close</a>
 				<button class='btn btn-primary' ng-click='request()'>Request this pet</button>
 			</div>
 		</div>
