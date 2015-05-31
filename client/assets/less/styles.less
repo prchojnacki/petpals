@@ -12,13 +12,25 @@ body {
     background-repeat: no-repeat;
     color: #A9765C;
     background-size: 100% 100%;
-    #button {
-    	background: transparent url('../img/grey-paw-print-md.png') no-repeat center center / contain;
-    	display: block;
+    button {
+    	background: transparent;
     	border: none;
-    	width: 299px;
-    	height: 288px;
-    }
+    	max-width:100%;
+    	height:auto;
+    	overflow:hidden;
+    	max-height:145px;
+    	svg {
+    		margin-top: 5px;
+    		width: 100px;
+    		height: 100px * 1.414285138322392;
+    		path {
+    			fill: #2c2c2b; //Default
+    		}
+
+    	}
+		&:hover svg path {
+			fill: #A9765C;
+		}    }
 }
 #search {
 	.make-xs-column(12);
@@ -48,6 +60,7 @@ body {
 	}
 }
 #results {
+	margin-top: 30px;
 	.pet {
 		.make-xs-column(6);
 		.make-sm-column(3);
