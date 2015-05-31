@@ -41,7 +41,16 @@
 		</form>
 	</div><!-- /#searbar -->
 	<div id="results" class="row">
-		<div class='pet media col-xs-6 col-sm-3'>
+		<div class='pet' ng-repeat="pet in pets">
+			<div class="well well-sm">
+			<img ng-src="{{pet.photos[3]}}">
+				<h4 class="clearfix"><span ng-bind="pet.name"></span> <small class="pull-right text-info" ng-bind="pet.breed"></small></h4>
+				<p><small>Distance: <span ng-bind=''></span> miles
+				<br>Cost Estimate: <span ng-bind=''></span></small></p>
+				<p class="text-center"><button class='btn btn-primary btn-sm' type="button">Select</button></p>
+			</div>
+		</div>
+<!-- 		<div class='pet media col-xs-6 col-sm-3'>
 			<div class="media-left">
 				<a><img class="img-responsive media-object" src=""></a>
 			</div>
@@ -118,18 +127,7 @@
 				<button class='btn btn-primary' ng-click='select()'>Select</button>
 			</div>
 		</div>
-		<div class='pet media col-xs-6 col-sm-3'>
-			<div class="media-left">
-				<a><img class="img-responsive media-object" src=""></a>
-			</div>
-			<div class="media-body">
-				<h4 class="media-head">Pet Name Here</h4>
-				<p>Distance: <span ng-bind='distance'></span> miles</p>
-				<p>Estimate to Uber: <span ng-bind='price'></span></p>
-				<button class='btn btn-primary' ng-click='select()'>Select</button>
-			</div>
-		</div>
-	</div><!-- /#results -->
+ -->	</div><!-- /#results -->
 </div>
 <!-- Begin Modal HTML code -->
 <div id="confirmation" class="modal fade" tabindex="-1">

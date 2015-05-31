@@ -125,15 +125,15 @@ function Petfinder () {
       petObj.sex = obj.sex.$t;
 
       function getShelter(shelterId) {
-        self.shelter.get({ "query" : { "id": shelterId }}, function (obj) {
-          console.log("OBJ IN SHELTER GET REQUEST", obj);
-          shelterLocation = {};
-          shelterLocation.longitude = obj.shelter.longitude.$t;
-          shelterLocation.latitude = obj.shelter.latitude.$t;
-          return shelterLocation;
-        });
+      //  self.shelter.get({ "query" : { "id": shelterId }}, function (obj) {
+      //     //console.log("OBJ IN SHELTER GET REQUEST", obj);
+      //     shelterLocation = {};
+      //     shelterLocation.longitude = obj.shelter.longitude.$t;
+      //     shelterLocation.latitude = obj.shelter.latitude.$t;
+      //     return shelterLocation;
+      //   });
       };
-      petObj.location = getShelter(obj.shelterId.$t);
+      // petObj.location = getShelter(obj.shelterId.$t);
 
       return petObj;
     }
@@ -161,8 +161,4 @@ pet_finder.shelter.get({ "query": { "id": "CA912" } }, function (data) {
 //   // console.log('PET BY ID', data);
 //   return data;
 // });
-
-
-
-
-
+// end of file

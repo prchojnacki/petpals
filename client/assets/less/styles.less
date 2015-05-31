@@ -3,7 +3,7 @@
 @import (reference) 'mixins';
 
 body {
-	background: #eee url('http://localhost:8000/assets/img/paisley.png') repeat;
+	background: #DADAD2;
 }
 #welcome {
 	.make-xs-column(12);
@@ -25,7 +25,19 @@ body {
 }
 #results {
 	.pet {
-		margin-top:1em;
+		.make-xs-column(6);
+		.make-sm-column(3);
+		img {
+			display: block;
+			max-width:100%;
+			width: auto;
+			height:auto;
+			max-height: 175px;
+			margin: 0 auto;
+		}
+		p small {
+			font-size: 75%;
+		}
 	}
 }
 #finished {
