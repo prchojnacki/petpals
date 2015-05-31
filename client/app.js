@@ -65,27 +65,37 @@ petPals.factory('petFactory', function ($http, $window) {
 		//get and set pets
 		var data = { "animal": "dog", "location": "94022", "age" : "senior", "count" : "3" };
 		$http({ url: '/petfinder/pets', method: 'GET', params: data }).success(function (output) {
-			console.log("OUTPUT IN getPets FACTORY METHOD", output);
-			var s_id = [];
-			for (pet in output) {
-				if (s_id.indexOf(output[pet].shelterID) === -1) {
-					s_id.push(output[pet].shelterID);
-				}
-			}
-
-
-			// for (pet in output) {
-			// 	//get shelter location - set endLatitude/endLongitude
-			// 	var endLatitude = output[pet].location.latitude;
-			// 	var endLongitude = output[pet].location.longitude;
-			// 	//get uber estimate of cost and distance
-			// 	$http.post('/price', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: endLatitude, end_longitude: endLongitude}).success(function (output) {
-			// 		output[pet].price = price.prices[0].estimate;
-			// 		output[pet].distance = price.prices[0].distance;
-			// 	});
-			// }
 			pets = output;
-			callback(output);
+			var temp = [];
+			var count = 0;
+			for (pet in output) {
+				// if (temp.output[pet].shelterId==-1) {
+					temp.push(output[pet].shelterId);
+					var data = {"id":output[pet].shelterId};
+					$http({ url: '/petfinder/shelters', method: 'GET', params: data }).success(function (petfinderShelter) {
+						var endLatitude = petfinderShelter.petfinder.shelter.latitude.$t;
+				    	var endLongitude = petfinderShelter.petfinder.shelter.longitude.$t;
+				        var SID = petfinderShelter.petfinder.shelter.id.$t;
+				        $http.post('/price', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: endLatitude, end_longitude: endLongitude}).success(function (uberPrice) {
+				        	p = uberPrice.prices[0].estimate;
+				        	d = uberPrice.prices[0].distance;
+							shelters.push({shelterId: SID, price: p, distance: d});
+							count ++;
+							if(count==pets.length-1) {
+								callback(shelters, pets);
+							}
+						});
+				    });
+				// }
+				// else {
+				// 	count ++;
+
+				// }
+				// if(count == pets.length-1) {
+				// 	console.log(shelters);
+				// 	callback(shelters, pets);
+				// }
+			}
 		});
 	};
 
@@ -129,18 +139,21 @@ petPals.controller('welcomeController', function ($scope, petFactory, $window) {
 
 petPals.controller('mainController', function ($scope, petFactory, $window) {
 
-	var ex_options = { "query": { "animal": "dog", "location": "94022", "age" : "senior", "count" : "2" }};
-
-	petFactory.getPets(function (output) {
-		console.log("OUTPUT IN GET PET CONTROLLER");
-		$scope.pets = output;
-		console.log("\n","SCOPE.PETS",$scope.pets);
-	});
-
 	petFactory.getLocation(function (data) {
 		$scope.location = data;
-		petFactory.getPets (function (pets) {
+		petFactory.getPets (function (shelters, pets) {
+			$scope.shelters = shelters;
 			$scope.pets = pets;
+			for (var i = 0; i < $scope.pets.length; i++) {
+				for (var j = 0; j < $scope.shelters.length; j++) {
+					if ($scope.pets[i].shelterId == $scope.shelters[j].shelterId) {
+						$scope.pets[i].price = $scope.shelters[j].price;
+						$scope.pets[i].distance = $scope.shelters[j].distance;
+					} else {
+						continue;
+					}
+				}
+			}
 		})
 	})
 
