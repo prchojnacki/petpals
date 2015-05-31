@@ -62,7 +62,6 @@ function Petfinder () {
     clean: function(pet){
       var photos = [];
       var options = [];
-      console.log(pet);
       if (typeof(pet.media.photos) !== 'undefined') {
         for (var i in pet.media.photos.photo){
         	if (pet.media.photos.photo[i]['@size'] == 'x') {
@@ -107,7 +106,6 @@ function Petfinder () {
     },
 
     clean: function(shelter){
-    	console.log("shelter:", shelter);
       return {
         longitude: shelter.longitude.$t,
         latitude: shelter.latitude.$t,

@@ -64,7 +64,7 @@ petPals.factory('petFactory', function ($http, $window) {
 	factory.getPets = function (specs, callback) {
 		//get and set pets
 		if(specs == '') {
-			var data = { "location": "94022", "count": "16" };
+			var data = { "location": "95112", "count": "16" };
 		}
 		else {
 			var data = { "animal": specs.animal, "breed": specs.breed, "size": specs.size, "sex": specs.sex, "location": "94022", "age" : specs.age, "count" : "16" };
@@ -88,9 +88,15 @@ petPals.factory('petFactory', function ($http, $window) {
 				    	var endLongitude = petfinderShelter.longitude;
 				        var SID = petfinderShelter.id;
 				        $http.post('/price', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: endLatitude, end_longitude: endLongitude}).success(function (uberPrice) {
-				        	p = uberPrice.prices[0].estimate;
-				        	d = uberPrice.prices[0].distance;
-							shelters.push({shelterId: SID, price: p, distance: d});
+				        	console.log("uberPrice", uberPrice);
+				        	if (typeof(uberPrice.prices) == "undefined") {
+				        		p = "Unknown";
+				        		d = "Unknown";
+				        	} else {
+				        		p = uberPrice.prices[0].estimate;
+				        		d = uberPrice.prices[0].distance;
+				        	}
+				        	shelters.push({shelterId: SID, price: p, distance: d});
 
 							count ++;
 							if(count==pets.length-1) {
@@ -165,6 +171,8 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 
 	$scope.search = function (params) {
 		console.log("PARAMS IN SEARCH", params);
+		if (params.age == 'Any') { delete params.age; }
+		if (params.sex == 'Any') { delete params.sex; }
 		petFactory.getPets (params, function (shelters, pets) {
 			$scope.shelters = shelters;
 			$scope.pets = pets;
