@@ -45,9 +45,9 @@
 			<div class="well well-sm">
 			<img ng-src="{{pet.photos[3]}}">
 				<h4 class="clearfix"><span ng-bind="pet.name"></span> <small class="pull-right text-info" ng-bind="pet.breed"></small></h4>
-				<p><small>Distance: <span ng-bind=''></span> miles
-				<br>Cost Estimate: <span ng-bind=''></span></small></p>
-				<p class="text-center"><button class='btn btn-primary btn-sm' type="button">Select</button></p>
+				<p><small>Distance: <span ng-bind='pet.distance'></span> miles
+				<br>Cost Estimate: <span ng-bind='pet.price'></span></small></p>
+				<p class="text-center"><button class='btn btn-primary btn-sm' type="button" ng-click = "select(pet.id)">Select</button></p>
 			</div>
 		</div>
 <!-- 		<div class='pet media col-xs-6 col-sm-3'>

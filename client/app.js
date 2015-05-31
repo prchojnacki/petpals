@@ -33,6 +33,9 @@ petPals.factory('petFactory', function ($http, $window) {
 	var userLongitude;
 	var ride;
 	var selectedPetName;
+	var selectedPet;
+	var pets;
+	var shelters = [];
 
 	var locationDiv = document.getElementById('location');
 
@@ -63,19 +66,37 @@ petPals.factory('petFactory', function ($http, $window) {
 		var data = { "animal": "dog", "location": "94022", "age" : "senior", "count" : "3" };
 		$http({ url: '/petfinder/pets', method: 'GET', params: data }).success(function (output) {
 			console.log("OUTPUT IN getPets FACTORY METHOD", output);
+			var s_id = [];
 			for (pet in output) {
-				//get shelter location - set endLatitude/endLongitude
-				var endLatitude = output[pet].location.latitude;
-				var endLongitude = output[pet].location.longitude;
-				//get uber estimate of cost and distance
-				$http.post('/price', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: endLatitude, end_longitude: endLongitude}).success(function (output) {
-					output[pet].price = price.prices[0].estimate;
-					output[pet].distance = price.prices[0].distance;
-				});
+				if (s_id.indexOf(output[pet].shelterID) === -1) {
+					s_id.push(output[pet].shelterID);
+				}
 			}
+
+
+			// for (pet in output) {
+			// 	//get shelter location - set endLatitude/endLongitude
+			// 	var endLatitude = output[pet].location.latitude;
+			// 	var endLongitude = output[pet].location.longitude;
+			// 	//get uber estimate of cost and distance
+			// 	$http.post('/price', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: endLatitude, end_longitude: endLongitude}).success(function (output) {
+			// 		output[pet].price = price.prices[0].estimate;
+			// 		output[pet].distance = price.prices[0].distance;
+			// 	});
+			// }
+			pets = output;
 			callback(output);
 		});
 	};
+
+	factory.selectPet = function (id, callback) {
+		for (pet in pets) {
+			if(pets[pet].id == id) {
+				selectedPet = pets[pet]
+			}
+		}
+		callback(selectedPet);
+	}
 
 	factory.request = function (callback) {
  		$http.get('/auth/isAuthenticated').success(function (output) {
@@ -123,8 +144,11 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 		})
 	})
 
-	$scope.select = function () {
+	$scope.select = function (id) {
 		//add pet information to $scope
+		petFactory.selectPet(id, function (pet) {
+			$scope.selectedPet = pet;
+		})
 	}
 
 	$scope.request = function () {

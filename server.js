@@ -17,6 +17,9 @@ app.get('/petfinder/pets', function (req, res) {
   //console.log("REQ PARAMS", req.query);
   petfinder.pet.find(req,res);
 });
+app.get('/petfinder/shelters',function (req,res){
+  
+});
 // var routes = require('./routes.js')(app);
 // Get all auth stuff from config file
 // ClientID & ClientSecret for API requests with OAUTH
