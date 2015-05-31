@@ -8,23 +8,44 @@ body {
 #welcome {
 	.make-xs-column(12);
     height: 100vh;
-    background-image: url(https://38.media.tumblr.com/tumblr_m7yuqbQZT91qgawlzo1_500.gif);
+    background-image: url('../img/cute-white-puppy-wide.jpg');
     background-repeat: no-repeat;
-    text-align: center;
-    color: @brand-primary;
+    color: #A9765C;
     background-size: 100% 100%;
-    padding: 12.5% 0;
-    h1,h2 {
-    	font-weight: bold;
+    #button {
+    	background: transparent url('../img/grey-paw-print-md.png') no-repeat center center / contain;
+    	display: block;
+    	border: none;
+    	width: 299px;
+    	height: 288px;
     }
 }
+#search {
+	.make-xs-column(12);
+}
 #searchbar {
-	background-image: url("./img/hound.jpg");
-	background-repeat: none;
-	background
-	// background-color: fadeout(@brand-success, 50%);
-	margin: -0.9375em  -0.9375em  0.9375em;
-	padding: 0.9375em;
+	background: #f5f5f5 url("../img/hound.jpg") no-repeat right top / contain padding-box;
+	padding-left: 15px;
+	padding-right: 15px;
+	margin-top: 30px;
+	min-height: 25%;
+	#searchbar_content {
+		.make-row();
+		.clearfix();
+		//padding-top: 15px;
+		padding-bottom: 15px;
+		h3 {
+			padding-left: 15px;
+		}
+		form {
+			.make-xs-column(6);
+			.make-sm-column(9);
+			.make-md-column(8);
+			button {
+				margin-top: 15px;
+			}	
+		}
+	}
 }
 #results {
 	.pet {

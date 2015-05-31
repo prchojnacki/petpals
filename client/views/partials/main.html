@@ -1,78 +1,77 @@
-<div id="main_container">
-<div id="search" class="col-xs-12">
-	<div id='location'></div>
+<div id="search">
+<!-- 	<div id='location'></div> -->
 	<div id="searchbar">
 		<div id="searchbar_content">
-		<h3>Search By</h3>
-		<form class="form-horizontal">
-			<div class="form-group">
-				<label class="col-xs-6">
-					Type of Animal
-					<select class="form-control">
-						<option value="any">Pet</option>
-						<option value="dog">Dog</option>
-						<option value="cat">Cat</option>
-						<option value="rabbit">Rabbit</option>
-						<option value="small-furry">Small & Furry</option>
-						<option value="horse">Horse</option>
-						<option value="bird">Bird</option>
-						<option value="scale-fins-others">Scales, Fins, & Others</option>
-						<option value="pig">Pig</option>
-						<option value="barnyard">Barnyard</option>
-					</select>
-				</label>
-				<label class="col-xs-6">
-					Breed
-					<input type="text" class="form-control">
-				</label>
-				<label class="col-xs-6">
-					Age
-					<select class="form-control">
-						<option value="Any">Any</option>
-						<option value="Baby">Baby</option>
-						<option value="Young Adult">Young Adult</option>
-						<option value="Adult">Adult</option>
-						<option value="Senior">Senior</option>
-					</select>
-				</label>
-				<label class="col-xs-6">
-					Gender
-					<select class="form-control">
-						<option value="Any">Either</option>
-						<option value="Male">Male</option>
-						<option value="Female">Female</option>
-					</select>
-				</label>
-			</div>
-			<div class="form-group">
-				<label class="col-xs-6">Characteristics
-					<div class="btn-group" style="width: 100%">
-						<button class="btn btn-default">House Trained</button>
-						<button class="btn btn-default">Declawed</button>
-						<button class="btn btn-default">Special Needs</button>
-					</div>
-				</label>
-				<label class="col-xs-6">Size
-					<div class="btn-group" style="width: 100%">
-						<button class="btn btn-default">S</button>
-						<button class="btn btn-default">M</button>
-						<button class="btn btn-default">L</button>
-						<button class="btn btn-default">XL</button>
-					</div>
-				</label>
-			</div>
-			<div class="form-group">
-				<label class="col-xs-12">My Household Has
-					<div class="btn-group" style="width: 100%">
-						<button class="btn btn-default">Cats</button>
-						<button class="btn btn-default">Dogs</button>
-						<button class="btn btn-default">Young Children</button>
-					</div>
-				</label>
-			</div>
-			<button class="btn-primary">Submit</button>
-		</form>
-		</div>
+			<h3>Search By</h3>
+			<form>
+				<div class="form-group">
+					<label class="col-xs-6">
+						Type of Animal
+						<select class="form-control">
+							<option value="any">Pet</option>
+							<option value="dog">Dog</option>
+							<option value="cat">Cat</option>
+							<option value="rabbit">Rabbit</option>
+							<option value="small-furry">Small & Furry</option>
+							<option value="horse">Horse</option>
+							<option value="bird">Bird</option>
+							<option value="scale-fins-others">Scales, Fins, & Others</option>
+							<option value="pig">Pig</option>
+							<option value="barnyard">Barnyard</option>
+						</select>
+					</label>
+					<label class="col-xs-6">
+						Breed
+						<input type="text" class="form-control">
+					</label>
+					<label class="col-xs-6">
+						Age
+						<select class="form-control">
+							<option value="Any">Any</option>
+							<option value="Baby">Baby</option>
+							<option value="Young Adult">Young Adult</option>
+							<option value="Adult">Adult</option>
+							<option value="Senior">Senior</option>
+						</select>
+					</label>
+					<label class="col-xs-6">
+						Gender
+						<select class="form-control">
+							<option value="Any">Either</option>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>
+					</label>
+				</div>
+	<!-- 			<div class="form-group">
+					<label class="col-xs-6">Characteristics
+						<div class="btn-group" style="width: 100%">
+							<button class="btn btn-default">House Trained</button>
+							<button class="btn btn-default">Declawed</button>
+							<button class="btn btn-default">Special Needs</button>
+						</div>
+					</label>
+					<label class="col-xs-6">Size
+						<div class="btn-group" style="width: 100%">
+							<button class="btn btn-default">S</button>
+							<button class="btn btn-default">M</button>
+							<button class="btn btn-default">L</button>
+							<button class="btn btn-default">XL</button>
+						</div>
+					</label>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12">My Household Has
+						<div class="btn-group" style="width: 100%">
+							<button class="btn btn-default">Cats</button>
+							<button class="btn btn-default">Dogs</button>
+							<button class="btn btn-default">Young Children</button>
+						</div>
+					</label>
+				</div> -->
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div><!-- /#searchbar_content -->
 	</div><!-- /#searbar -->
 	<div id="results" class="row">
 		<div class='pet' ng-repeat="pet in pets">
