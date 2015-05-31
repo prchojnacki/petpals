@@ -115,7 +115,17 @@ passport.use(new uberStrategy({
 // });
 
 app.get('/auth/isAuthenticated', function(req, res) {
+  // console.log(req.isAuthenticated());
+  // if(req.isAuthenticated()) {
+  //   res.send(req.isAuthenticated());
+  // }
+  // else {
+  //   res.redirect('/auth/uber/callback');
+
+  //   // app.get('/auth/uber/callback');
+  // }
   res.send(req.isAuthenticated());
+
 });
 
 // get request to start the whole oauth process with passport
@@ -129,8 +139,10 @@ app.get('/auth/uber',
 app.get('/auth/uber/callback',
 	passport.authenticate('uber', {
 		failureRedirect: '/'
-	}), function(req, res) {
-    res.redirect('/#/pet');
+	}), function(req, res, next) {
+    // res.json({output: true});
+    // res.redirect('/#/finished');
+    return next();
   });
 
 // home after the user is authenticated
@@ -163,6 +175,7 @@ app.get('/history', ensureAuthenticated, function (request, response) {
 
 // ride request API endpoint
 app.post('/request', ensureAuthenticated, function (request, response) {
+  console.log('in /request');
 	// NOTE! Keep in mind that, although this link is a GET request, the actual ride request must be a POST, as shown below
 	var parameters = {
 		start_latitude : request.body.start_latitude,
@@ -190,9 +203,11 @@ function ensureAuthenticated (request, response, next) {
 	if (request.isAuthenticated()) {
     console.log("Authenticated!");
 		return next();
-	}
-  console.log("Not? authenticated?");
-	response.redirect('/');
+	} else {
+    response.redirect('/auth/uber/callback')
+  }
+ //  console.log("Not? authenticated?");
+	// response.redirect('/');
 }
 // use this for an api get request
 function getAuthorizedRequest(endpoint, accessToken, callback) {
@@ -201,7 +216,9 @@ function getAuthorizedRequest(endpoint, accessToken, callback) {
     path: endpoint,
     method: "GET",
     headers: {
-      Authorization: "Bearer " + accessToken
+      Authorization: "Bearer " + accessToken,
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Origin": "https://login.uber.com/oauth/"
     }
   }
   var req = https.request(options, function(res) {
@@ -224,7 +241,9 @@ function postAuthorizedRequest(endpoint, accessToken, parameters, callback) {
     method: "POST",
     headers: {
       Authorization: "Bearer " + accessToken,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json', 
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Origin": "https://login.uber.com/oauth/authorize"
     }
   }
   var req = https.request(options, function(res) {
