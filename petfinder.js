@@ -4,13 +4,6 @@ var secret = config.petfinderSecret;
 var http = require("http");
 var url = require("url");
 var _ = require('underscore');
-var express = require('express');
-var bodyParser = require('body-parser');
-var app = express();
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-var petfinder = require('./petfinder.js');
-// var routes = require('./routes.js')(app);
 
 function Petfinder () {
 
@@ -23,6 +16,14 @@ function Petfinder () {
       "host": "api.petfinder.com",
       "query": { "format": "json", "key": self.KEY }
     };
+    //What's wrong with doing the following?
+    /*
+    opts.protocol = "http";
+    opts.host = "api.petfinder.com"
+    opts.query.format = "json";
+    opts.query.key = self.KEY;
+    */
+
     // I'm using underscore.js to combine these objects...
     // Just trust me, we need it.
     _.defaults(options.query, opts.query);
@@ -32,7 +33,6 @@ function Petfinder () {
 
   self.getRequest = function (opts, callback) {
     var new_url = url.format(self.options(opts));
-    // console.log("\n","URL", new_url);
     http.get(new_url, function (res) {
       var data = "";
       res.on("data", function (val) {
@@ -51,7 +51,7 @@ function Petfinder () {
       var all_pets = [];
       self.getRequest(new_query, function (results) {
         for (var i = 0; i < results.petfinder.pets.pet.length; i++) {
-          var new_pet = self.makeFriendly(results.petfinder.pets.pet[i]);
+          var new_pet = self.pet.clean(results.petfinder.pets.pet[i]);
           all_pets.push(new_pet);
         };
       });
@@ -61,20 +61,17 @@ function Petfinder () {
       var options = self.options(opts);
       _.extend(options, { "pathname": "/pet.get" });
       self.getRequest(options, callback);
-    }
-  };
-
-  self.shelter = {
-    get: function (id, callback) {
-      var opts = { "query" : { "id": id } };
-      var options = self.options(opts);
-      _.extend(options, { "pathname": "/shelter.get" });
-      self.getRequest(options, callback);
-    }
-  };
-
-  self.makeFriendly = function(pet) {
-      var petObj = {
+    },
+    clean: function(pet){
+      var photos = [];
+      var options = [];
+      for(var i in pet.media.photos.photo){
+        photos.push(pet.media.photos.photo[i].$t);
+      }
+      for(i in pet.options.option){
+        options.push(pet.options.option[i]);
+      }
+      return {
         animal:       pet.animal.$t,
         age:          pet.age.$t,
         breed:        pet.breeds.breed.$t,
@@ -84,25 +81,34 @@ function Petfinder () {
                       },
         description:  pet.description.$t,       
         name:         pet.name.$t,
-        options:      [],
-        photos:       [],
+        options:      options,
+        photos:       photos,
         sex:          pet.sex.$t,
         shelterId:    pet.shelterId.$t,
       };
-      for (var i = 0; i < pet.media.photos.photo.length; i++) {
-        petObj.photos.push(pet.media.photos.photo[i].$t);
-      }
-      for (var j = 0; j < pet.options.option.length; j++) {
-        petObj.options.push(pet.options.option[j].$t);
-      }
+    }
+  };
 
-      return petObj;
+  self.shelter = {
+    get: function (id, callback) {
+      var opts = { "query" : { "id": id } };
+      var options = self.options(opts);
+      _.extend(options, { "pathname": "/shelter.get" });
+      self.getRequest(options, function(results){
+        var output = self.shelter.clean(results.petfinder.shelter);
+        callback(output);
+      });
+    },
+    clean: function(shelter){
+      return {
+        longitude: shelter.longitude.$t,
+        latitude: shelter.latitude.$t
+      };
+    }
   };
 };
 
-var pet_finder = new Petfinder();
-
-module.exports = pet_finder;
+module.exports = new Petfinder();
 
 //-------------------------- ROUTES -------------------------- //
 
