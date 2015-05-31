@@ -7,37 +7,36 @@
 				<div class="form-group">
 					<label class="col-xs-6">
 						Type of Animal
-						<select class="form-control">
-							<option value="any">Pet</option>
+						<select class="form-control" ng-model="search_query.animal">
+							<option value="any" selected default>Pet</option>
 							<option value="dog">Dog</option>
 							<option value="cat">Cat</option>
 							<option value="rabbit">Rabbit</option>
-							<option value="small-furry">Small & Furry</option>
+							<option value="smallfurry">Small & Furry</option>
 							<option value="horse">Horse</option>
 							<option value="bird">Bird</option>
-							<option value="scale-fins-others">Scales, Fins, & Others</option>
+							<option value="reptile">Reptiles</option>
 							<option value="pig">Pig</option>
-							<option value="barnyard">Barnyard</option>
 						</select>
 					</label>
 					<label class="col-xs-6">
 						Breed
-						<input type="text" class="form-control">
+						<input type="text" class="form-control" ng-model="search_query.breed">
 					</label>
 					<label class="col-xs-6">
 						Age
-						<select class="form-control">
-							<option value="Any">Any</option>
+						<select class="form-control" ng-model="search_query.age">
+							<option value="Any" selected>Any</option>
 							<option value="Baby">Baby</option>
-							<option value="Young Adult">Young Adult</option>
+							<option value="Young">Young</option>
 							<option value="Adult">Adult</option>
 							<option value="Senior">Senior</option>
 						</select>
 					</label>
 					<label class="col-xs-6">
 						Gender
-						<select class="form-control">
-							<option value="Any">Either</option>
+						<select class="form-control" ng-model="search_query.gender">
+							<option value="Any" selected>Either</option>
 							<option value="Male">Male</option>
 							<option value="Female">Female</option>
 						</select>
@@ -69,7 +68,7 @@
 						</div>
 					</label>
 				</div> -->
-				<button type="submit" class="btn btn-primary">Submit</button>
+				<button type="submit" class="btn btn-primary" ng-click="search(search_query)">Search</button>
 			</form>
 		</div><!-- /#searchbar_content -->
 	</div><!-- /#searbar -->
@@ -77,10 +76,16 @@
 		<div class='pet' ng-repeat="pet in pets">
 			<div class="well well-sm">
 			<img ng-src="{{pet.photos[0]}}">
-				<h4 class="clearfix"><span ng-bind="pet.name"></span> <small class="pull-right text-info" ng-bind="pet.breed"></small></h4>
-				<p><small>Distance: <span ng-bind='pet.distance'></span> miles
-				<br>Cost Estimate: <span ng-bind='pet.price'></span></small></p>
-				<p class="text-center"><button class='btn btn-primary btn-sm' type="button" data-toggle='modal' data-target = "#confirmation" ng-click = "select(pet.id)">Select</button></p>
+				<h4 class="clearfix"><span ng-bind="pet.name"></span> <small class="pull-right" ng-bind="pet.breed"></small></h4>
+				<div class="row">
+					<div class="col-xs-6">
+						<p><small>Uber Dist: <b ng-bind='pet.distance'></b><b>m</b>
+						<br>Uber Cost: <b ng-bind='pet.price'></b></small></p>
+					</div>
+					<div class="col-xs-6">
+						<p class="text-center"><button class='btn btn-primary btn-sm' type="button" data-toggle='modal' data-target = "#confirmation" ng-click="select(pet.id)">Select</button></p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div><!-- /#results -->
@@ -96,17 +101,17 @@
 			<div class="modal-body">
 				<img class="img-responsive" ng-src="{{selectedPet.photos[0]}}">
 				<div class="row">
-					<div class="col-xs-6 col-sm-3" ng-repeat = 'photo in selectedPet.photos'>
+					<div class="col-xs-3" ng-repeat = 'photo in selectedPet.photos'>
 						<a class="thumbnail"><img ng-src = "{{photo}}"></a>
 					</div>
 				</div>
 				<p>Name: <span class="text-info" ng-bind="selectedPet.name"></span></p>
 				<p>Age: <span class="text-info" ng-bind="selectedPet.age"></span></p>
 				<p>Breed: <span class="text-info" ng-bind="selectedPet.breed"></span></p>
-				<p>Description: <span class="text-info" ng-bind="selectedPet.description"></span></p>
+				<p>Description: <span style="color: gray" ng-bind="selectedPet.description"></span></p>
 				<hr>
 				<p>Distance: <span class="text-danger" ng-bind="selectedPet.distance"></span></p>
-				<p>Cost: $<span class="text-danger" ng-bind="selectedPet.price"></span></p>
+				<p>Cost: <span class="text-danger" ng-bind="selectedPet.price"></span></p>
 			</div>
 			<div class="modal-footer">
 				<a class='text-danger pull-left' data-dismiss="modal">Close</a>

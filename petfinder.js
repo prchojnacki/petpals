@@ -16,13 +16,6 @@ function Petfinder () {
       "host": "api.petfinder.com",
       "query": { "format": "json", "key": self.KEY }
     };
-    //What's wrong with doing the following?
-    /*
-    opts.protocol = "http";
-    opts.host = "api.petfinder.com"
-    opts.query.format = "json";
-    opts.query.key = self.KEY;
-    */
 
     // I'm using underscore.js to combine these objects...
     // Just trust me, we need it.
@@ -46,33 +39,43 @@ function Petfinder () {
 
   self.pet = {
     find: function (req, res) {
-      var new_query = self.options({query: req.query});
+      var new_query = self.options(req);
       _.extend(new_query, { "pathname": "/pet.find" });
       var all_pets = [];
       self.getRequest(new_query, function (results) {
-        for (var i = 0; i < results.petfinder.pets.pet.length; i++) {
-          var new_pet = self.pet.clean(results.petfinder.pets.pet[i]);
-          all_pets.push(new_pet);
-        };
+        if (typeof(results.petfinder.pets.pet) !== 'undefined') {
+          for (var i = 0; i < results.petfinder.pets.pet.length; i++) {
+            var new_pet = self.pet.clean(results.petfinder.pets.pet[i]);
+            all_pets.push(new_pet);
+          };
+        }
         res.json(all_pets);
       });
     },
+
     get: function (opts, callback) {
       var options = self.options(opts);
       _.extend(options, { "pathname": "/pet.get" });
       self.getRequest(options, callback);
     },
+
     clean: function(pet){
       var photos = [];
       var options = [];
-      for(var i in pet.media.photos.photo){
-      	if (pet.media.photos.photo[i]['@size'] == 'x') {
-      		photos.push(pet.media.photos.photo[i].$t);
-      	}
+      console.log(pet);
+      if (typeof(pet.media.photos) !== 'undefined') {
+        for (var i in pet.media.photos.photo){
+        	if (pet.media.photos.photo[i]['@size'] == 'x') {
+        		photos.push(pet.media.photos.photo[i].$t);
+        	}
+        }
       }
-      for(i in pet.options.option){
-        options.push(pet.options.option[i]);
+      if (typeof(pet.options.option) !== 'undefined') {
+        for (i in pet.options.option){
+          options.push(pet.options.option[i]);
+        }
       }
+
       return {
         animal:       pet.animal.$t,
         age:          pet.age.$t,
@@ -102,6 +105,7 @@ function Petfinder () {
         callback(output);
       });
     },
+
     clean: function(shelter){
     	console.log("shelter:", shelter);
       return {

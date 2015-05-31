@@ -64,10 +64,10 @@ petPals.factory('petFactory', function ($http, $window) {
 	factory.getPets = function (specs, callback) {
 		//get and set pets
 		if(specs == '') {
-			var data = {"location": "94022", "count": "4"};
+			var data = { "location": "94022", "count": "16" };
 		}
 		else {
-			var data = { "animal": specs.animal, "breed": specs.breed, "size": specs.size, "sex": specs.sex, "location": "94022", "age" : specs.age, "count" : "8" };
+			var data = { "animal": specs.animal, "breed": specs.breed, "size": specs.size, "sex": specs.sex, "location": "94022", "age" : specs.age, "count" : "16" };
 		}
 		$http({ url: '/petfinder/pets', method: 'GET', params: data }).success(function (output) {
 			// console.log(output);
@@ -78,7 +78,11 @@ petPals.factory('petFactory', function ($http, $window) {
 			for (pet in output) {
 				// if (temp.output[pet].shelterId==-1) {
 					temp.push(output[pet].shelterId);
-					var data = {"id":output[pet].shelterId};
+					if (typeof(output[pet].shelterId) == 'undefined') {
+						var data = { "id": "CA1437" }
+					} else {
+						var data = { "id": output[pet].shelterId };
+					}
 					$http({ url: '/petfinder/shelters', method: 'GET', params: data }).success(function (petfinderShelter) {
 						var endLatitude = petfinderShelter.latitude;
 				    	var endLongitude = petfinderShelter.longitude;
@@ -87,7 +91,7 @@ petPals.factory('petFactory', function ($http, $window) {
 				        	p = uberPrice.prices[0].estimate;
 				        	d = uberPrice.prices[0].distance;
 							shelters.push({shelterId: SID, price: p, distance: d});
-							
+
 							count ++;
 							if(count==pets.length-1) {
 								callback(shelters, pets);
@@ -149,6 +153,8 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 					if ($scope.pets[i].shelterId == $scope.shelters[j].shelterId) {
 						$scope.pets[i].price = $scope.shelters[j].price;
 						$scope.pets[i].distance = $scope.shelters[j].distance;
+						$scope.pets[i].latitude = $scope.shelters[j].latitude;
+						$scope.pets[i].longitude = $scope.shelters[j].longitude;
 					} else {
 						continue;
 					}
@@ -158,6 +164,7 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 	})
 
 	$scope.search = function (params) {
+		console.log("PARAMS IN SEARCH", params);
 		petFactory.getPets (params, function (shelters, pets) {
 			$scope.shelters = shelters;
 			$scope.pets = pets;
