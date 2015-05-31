@@ -171,7 +171,7 @@
 				<h4 class="modal-title">Confirm Pet</h4>
 			</div>
 			<div class="modal-body">
-				<img class="img-responsive" src="" ng-src="">
+				<img class="img-responsive" src="" ng-src="selectedPet.photos[0]">
 				<div class="row">
 					<div class="col-xs-6 col-sm-3">
 						<a class="thumbnail"><img></a>
@@ -186,17 +186,17 @@
 						<a class="thumbnail"><img></a>
 					</div>
 				</div>
-				<p>Name: <span class="text-info" ng-bind=""></span></p>
-				<p>Age: <span class="text-info" ng-bind=""></span></p>
-				<p>Breed: <span class="text-info" ng-bind=""></span></p>
-				<p>Description: <span class="text-info" ng-bind=""></span></p>
+				<p>Name: <span class="text-info" ng-bind="selectedPet.name"></span></p>
+				<p>Age: <span class="text-info" ng-bind="selectedPet.age"></span></p>
+				<p>Breed: <span class="text-info" ng-bind="selectedPet.breed"></span></p>
+				<p>Description: <span class="text-info" ng-bind="selectedPet.description"></span></p>
 				<hr>
-				<p>Distance: <span class="text-danger" ng-bind=""></span></p>
-				<p>Cost: $<span class="text-danger" ng-bind=""></span></p>
+				<p>Distance: <span class="text-danger" ng-bind="selectedPet.distance"></span></p>
+				<p>Cost: $<span class="text-danger" ng-bind="selectedPet.price"></span></p>
 			</div>
 			<div class="modal-footer">
 				<a class='text-danger pull-left' data-dismiss="modal">Close</a>
-				<button class='btn btn-primary' ng-click='request()'>Request this pet</button>
+				<button class='btn btn-primary' ng-click='request(selectedPet.id)'>Request this pet</button>
 			</div>
 		</div>
 	</div>

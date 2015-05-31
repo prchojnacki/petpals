@@ -61,9 +61,14 @@ petPals.factory('petFactory', function ($http, $window) {
 		}
 	};
 
-	factory.getPets = function (callback) {
+	factory.getPets = function (specs, callback) {
 		//get and set pets
-		var data = { "animal": "dog", "location": "94022", "age" : "senior", "count" : "3" };
+		if(specs == '') {
+			var data = {"location": "94022", "count": "8"};
+		}
+		else {
+			var data = { "animal": specs.animal, "breed": specs.breed, "size": specs.size, "sex": specs.sex, "location": "94022", "age" : specs.age, "count" : "8" };
+		}
 		$http({ url: '/petfinder/pets', method: 'GET', params: data }).success(function (output) {
 			pets = output;
 			var temp = [];
@@ -99,15 +104,6 @@ petPals.factory('petFactory', function ($http, $window) {
 		});
 	};
 
-	factory.selectPet = function (id, callback) {
-		for (pet in pets) {
-			if(pets[pet].id == id) {
-				selectedPet = pets[pet]
-			}
-		}
-		callback(selectedPet);
-	}
-
 	factory.request = function (callback) {
  		$http.get('/auth/isAuthenticated').success(function (output) {
  			if (output == true) {
@@ -141,7 +137,7 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 
 	petFactory.getLocation(function (data) {
 		$scope.location = data;
-		petFactory.getPets (function (shelters, pets) {
+		petFactory.getPets ("",function (shelters, pets) {
 			$scope.shelters = shelters;
 			$scope.pets = pets;
 			for (var i = 0; i < $scope.pets.length; i++) {
@@ -157,11 +153,30 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 		})
 	})
 
-	$scope.select = function (id) {
-		//add pet information to $scope
-		petFactory.selectPet(id, function (pet) {
-			$scope.selectedPet = pet;
+	$scope.search = function (params) {
+		petFactory.getPets (params, function (shelters, pets) {
+			$scope.shelters = shelters;
+			$scope.pets = pets;
+			for (var i = 0; i < $scope.pets.length; i++) {
+				for (var j = 0; j < $scope.shelters.length; j++) {
+					if ($scope.pets[i].shelterId == $scope.shelters[j].shelterId) {
+						$scope.pets[i].price = $scope.shelters[j].price;
+						$scope.pets[i].distance = $scope.shelters[j].distance;
+					} else {
+						continue;
+					}
+				}
+			}
 		})
+	}
+
+	$scope.select = function (id) {
+		for (pet in $scope.pets) {
+			if ($scope.pets[pet].id == id) {
+				$scope.selectedPet = $scope.pets[pet];
+				console.log($scope.selectedPet);
+			}
+		}
 	}
 
 	$scope.request = function () {
