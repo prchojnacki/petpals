@@ -81,6 +81,7 @@ petPals.factory('petFactory', function ($http, $window) {
 						var endLatitude = petfinderShelter.petfinder.shelter.latitude.$t;
 				    	var endLongitude = petfinderShelter.petfinder.shelter.longitude.$t;
 				        var SID = petfinderShelter.petfinder.shelter.id.$t;
+				        console.log("SID", petfinderShelter);
 				        $http.post('/price', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: endLatitude, end_longitude: endLongitude}).success(function (uberPrice) {
 				        	p = uberPrice.prices[0].estimate;
 				        	d = uberPrice.prices[0].distance;
