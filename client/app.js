@@ -72,8 +72,14 @@ petPals.factory('petFactory', function ($http, $window) {
 			console.log("OUTPUT IN getPets FACTORY METHOD", output);
 			callback(output);
 		});
-
 	};
+
+	factory.getShelter = function (data, callback) {
+		$http({ url: '/petfinder/pets', method: 'GET', params: data }).success(function (output) {
+			console.log("OUTPUT IN GET SHELTERS FACTORY METHOD", output);
+			callback(output);
+		});
+	}
 
 	factory.request = function (callback) {
 		//$window.location.assign('/auth/uber');
@@ -110,8 +116,19 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 	var ex_options = { "query": { "animal": "dog", "location": "94022", "age" : "senior", "count" : "2" }};
 
 	petFactory.getPets(function (output) {
-		console.log("OUTPUT IN GET PET CONTROLLER");
 		$scope.pets = output;
+		var shelterIds = [];
+
+		for (var i = 0; i < $scope.pets.length; i++) {
+			if (! shelterIds.includes($scope.pets[i].shelterId)) {
+				shelterIds.push($scope.pets[i].shelterId);
+			}
+		};
+
+		for (var j = 0; j < shelterIds.length; j++) {
+
+		};
+
 		console.log("\n","SCOPE.PETS",$scope.pets);
 	});
 

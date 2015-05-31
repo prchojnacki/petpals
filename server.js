@@ -17,6 +17,11 @@ app.get('/petfinder/pets', function (req, res) {
   //console.log("REQ PARAMS", req.query);
   petfinder.pet.find(req,res);
 });
+
+app.get('/petfinder/shelters', function (req, res) {
+  //console.log("REQ PARAMS", req.query);
+  petfinder.shelter.get(req, res);
+});
 // var routes = require('./routes.js')(app);
 // Get all auth stuff from config file
 // ClientID & ClientSecret for API requests with OAUTH
@@ -48,7 +53,7 @@ app.post('/cars', function(request, response) {
 });
 
 app.post('/price', function (request, response) {
-  console.log('request.body',request.body);
+  // console.log('request.body',request.body);
   getRequest('/v1/estimates/price?start_latitude='+request.body.start_latitude+'&start_longitude='+request.body.start_longitude+'&end_latitude='+request.body.end_latitude+'&end_longitude='+request.body.end_longitude, function (err, res) {
     if(err) {
       console.log('err',err);
@@ -75,7 +80,7 @@ function getRequest(endpoint, callback) {
   // console.log('options', options);
 
   var req = https.request(options, function(res) {
-    console.log('in req');
+    // console.log('in req');
     var fullRes = ""
     res.setEncoding('utf8');
     res.on('readable', function() {
@@ -84,7 +89,7 @@ function getRequest(endpoint, callback) {
       console.log('chunk: ' + Buffer.byteLength(chunk) + ' bytes')
     });
     res.on('end', function() {
-      console.log("fullRes", fullRes);
+      // console.log("fullRes", fullRes);
       callback(null, JSON.parse(fullRes));
     });
 
@@ -112,9 +117,9 @@ passport.use(new uberStrategy({
 		callbackURL: "http://localhost:8000/auth/uber/callback"
 	},
 	function (accessToken, refreshToken, user, done) {
-		console.log('user:', user.first_name, user.last_name);
-		console.log('access token:', accessToken);
-		console.log('refresh token:', refreshToken);
+		// console.log('user:', user.first_name, user.last_name);
+		// console.log('access token:', accessToken);
+		// console.log('refresh token:', refreshToken);
     // THIS IS WHERE YOU WOULD PUT SOME DB LOGIC TO SAVE THE USER
 		user.accessToken = accessToken;
 		return done(null, user);

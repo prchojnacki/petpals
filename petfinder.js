@@ -30,24 +30,9 @@ function Petfinder () {
     return options;
   };
 
-
-  self.getSessionToken = function (opts) {
-    var token_string = 'http://api.petfinder.com/auth.getToken?key='+key+'&sig='+MD5(secret+'key='+key)+'/';
-    var getRes = https.get(token_string,function (res){
-      res.on('data', function (data) {
-        var xmlString = data.toString('utf-8');
-        token = xmlString.substring(xmlString.indexOf("<token>")+"<token>".length,xmlString.indexOf("</token>"));
-      });
-    });
-    getRes.on('error', function (err) {
-      console.log(err);
-    });
-    getRes.end();
-  };
-
   self.getRequest = function (opts, callback) {
     var new_url = url.format(self.options(opts));
-    console.log("\n","URL", new_url);
+    // console.log("\n","URL", new_url);
     http.get(new_url, function (res) {
       var data = "";
       res.on("data", function (val) {
@@ -60,31 +45,28 @@ function Petfinder () {
   };
 
   self.pet = {
-
     find: function (req, res) {
       var new_query = self.options(req);
       _.extend(new_query, { "pathname": "/pet.find" });
+      var all_pets = [];
       self.getRequest(new_query, function (results) {
-        var all_pets = [];
         for (var i = 0; i < results.petfinder.pets.pet.length; i++) {
-          console.log("RESULTS PET IN GET REQUEST",results.petfinder.pets.pet[i]);
-          all_pets.push(self.makeFriendly.pet(results.petfinder.pets.pet[i]));
-        }
-        console.log("ALL PETS", "\n", all_pets, "\n");
-        res.json(all_pets);
+          var new_pet = self.makeFriendly.pet(results.petfinder.pets.pet[i]);
+          all_pets.push(new_pet);
+        };
       });
+      res.json(all_pets);
     },
-
     get: function (opts, callback) {
       var options = self.options(opts);
       _.extend(options, { "pathname": "/pet.get" });
       self.getRequest(options, callback);
     }
-
   };
 
   self.shelter = {
-    get: function (opts, callback) {
+    get: function (id, callback) {
+      var opts = { "query" : { "id": id } };
       var options = self.options(opts);
       _.extend(options, { "pathname": "/shelter.get" });
       self.getRequest(options, callback);
@@ -92,49 +74,29 @@ function Petfinder () {
   };
 
   self.makeFriendly = {
-
-    pet: function (obj) {
-
-      console.log("\n","OBJ.ANIMAL IN MAKE FRIENDLY", "\n", obj.animal.$t);
+    pet: function(obj) {
       var petObj = {};
       petObj.animal = obj.animal.$t;
       petObj.age = obj.age.$t;
       petObj.name = obj.name.$t;
       petObj.breed = obj.breeds.breed.$t;
-      petObj.address =
-        obj.contact.address1.$t + " " +
-        obj.contact.address2.$t + " " +
-        obj.contact.city.$t + " " +
-        obj.contact.state.$t + ", " +
-        obj.contact.zip.$t;
       petObj.description = obj.description.$t;
       petObj.phone = obj.contact.phone.$t;
       petObj.email = obj.contact.email.$t;
+      petObj.shelterId = obj.shelterId.$t;
 
       var petPhotos = [];
       for (var i = 0; i < obj.media.photos.photo.length; i++) {
         petPhotos.push(obj.media.photos.photo[i].$t);
       }
       petObj.photos = petPhotos;
-
       var petOptions = [];
       for (var j = 0; j < obj.options.option.length; j++) {
         petOptions.push(obj.options.option[j].$t);
       }
+
       petObj.options = petOptions;
       petObj.sex = obj.sex.$t;
-
-      function getShelter(shelterId) {
-        self.shelter.get({ "query" : { "id": shelterId }}, function (obj) {
-          console.log("OBJ IN SHELTER GET REQUEST", obj);
-          shelterLocation = {};
-          shelterLocation.longitude = obj.shelter.longitude.$t;
-          shelterLocation.latitude = obj.shelter.latitude.$t;
-          return shelterLocation;
-        });
-      };
-      petObj.location = getShelter(obj.shelterId.$t);
-
       return petObj;
     }
   };
@@ -151,10 +113,10 @@ module.exports = pet_finder;
 //   return data.petfinder.pets;
 // });
 
-pet_finder.shelter.get({ "query": { "id": "CA912" } }, function (data) {
-  console.log("REQUEST SHELTERS LOS ALTOS", data);
-  return data.petfinder.shelter;
-});
+// pet_finder.shelter.get({ "query": { "id": "CA912" } }, function (data) {
+//   console.log("REQUEST SHELTERS LOS ALTOS", data);
+//   return data.petfinder.shelter;
+// });
 
 // Get a pet by its numeric id.
 // pet_finder.pet.get({ "query": { "id": 24395698 } }, function (data) {
