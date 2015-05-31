@@ -51,7 +51,7 @@ function Petfinder () {
       var all_pets = [];
       self.getRequest(new_query, function (results) {
         for (var i = 0; i < results.petfinder.pets.pet.length; i++) {
-          var new_pet = self.makeFriendly.pet(results.petfinder.pets.pet[i]);
+          var new_pet = self.makeFriendly(results.petfinder.pets.pet[i]);
           all_pets.push(new_pet);
         };
         res.json(all_pets);
@@ -73,33 +73,30 @@ function Petfinder () {
     }
   };
 
-  self.makeFriendly = {
-    pet: function(obj) {
-      var petObj = {};
-      petObj.animal = obj.animal.$t;
-      petObj.age = obj.age.$t;
-      petObj.name = obj.name.$t;
-      petObj.breed = obj.breeds.breed.$t;
-      petObj.description = obj.description.$t;
-      petObj.phone = obj.contact.phone.$t;
-      petObj.email = obj.contact.email.$t;
-      petObj.shelterId = obj.shelterId.$t;
-
-      var petPhotos = [];
-      for (var i = 0; i < obj.media.photos.photo.length; i++) {
-        petPhotos.push(obj.media.photos.photo[i].$t);
+  self.makeFriendly = function(pet) {
+      var petObj = {
+        animal:       pet.animal.$t,
+        age:          pet.age.$t,
+        breed:        pet.breeds.breed.$t,
+        contact:      {
+                        email: pet.contact.email.$t,
+                        phone:pet.contact.phone.$t
+                      },
+        description:  pet.description.$t,       
+        name:         pet.name.$t,
+        options:      [],
+        photos:       [],
+        sex:          pet.sex.$t,
+        shelterId:    pet.shelterId.$t,
+      };
+      for (var i = 0; i < pet.media.photos.photo.length; i++) {
+        petObj.photos.push(pet.media.photos.photo[i].$t);
       }
-      petObj.photos = petPhotos;
-      var petOptions = [];
-      for (var j = 0; j < obj.options.option.length; j++) {
-        petOptions.push(obj.options.option[j].$t);
+      for (var j = 0; j < pet.options.option.length; j++) {
+        petObj.options.push(pet.options.option[j].$t);
       }
-
-      petObj.options = petOptions;
-      petObj.sex = obj.sex.$t;
 
       return petObj;
-    }
   };
 };
 
