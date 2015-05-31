@@ -7,8 +7,17 @@ var uberStrategy = require('passport-uber');
 var https = require('https');
 var bodyParser = require('body-parser');
 var app = express();
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
 var config = require('./config.js');
 var petfinder = require('./petfinder.js');
+
+app.get('/petfinder/pets', function (req, res) {
+  //console.log("REQ PARAMS", req.query);
+  petfinder.pet.find(req,res);
+});
+// var routes = require('./routes.js')(app);
 // Get all auth stuff from config file
 // ClientID & ClientSecret for API requests with OAUTH
 var clientID = config.ClientID;
@@ -16,7 +25,7 @@ var clientSecret = config.ClientSecret;
 // ServerID for API requests without OAUTH
 var ServerID = config.ServerID;
 // sessionSecret used by passport
-var sessionSecret = "UBERAPIROCKS"
+var sessionSecret = "UBERAPIROCKS";
 
 app.use(session({
 	secret: sessionSecret,
@@ -29,8 +38,7 @@ app.use(express.static(__dirname + '/client'));
 // app.set('views', __dirname + '/client/views');
 // app.set('view engine','ejs');
 // bodyparser for handling post data
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
+
 
 // post to show unauthorized request
 app.post('/cars', function(request, response) {
@@ -78,7 +86,7 @@ function getRequest(endpoint, callback) {
     res.on('end', function() {
       console.log("fullRes", fullRes);
       callback(null, JSON.parse(fullRes));
-    })
+    });
 
   });
   req.end();
@@ -239,7 +247,8 @@ function postAuthorizedRequest(endpoint, accessToken, parameters, callback) {
   });
 }
 
+
 // start server
-var server = app.listen(8000, function(){
-	console.log('listening to port: 8000');
+var server = app.listen(8000, function() {
+	console.log("\n",'listening to port: 8000',"\n");
 });
