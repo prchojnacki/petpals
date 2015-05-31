@@ -88,6 +88,7 @@ function Petfinder () {
         photos:       [],
         sex:          pet.sex.$t,
         shelterId:    pet.shelterId.$t,
+        id:           pet.id.$t
       };
       for (var i = 0; i < pet.media.photos.photo.length; i++) {
         petObj.photos.push(pet.media.photos.photo[i].$t);
