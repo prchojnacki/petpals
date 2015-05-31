@@ -26,7 +26,7 @@
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-@body-bg:               #FFEAC4;
+@body-bg:               desaturate(lighten(@brand-success,25%),50%);
 //** Global text color on `<body>`.
 @text-color:            @gray-dark;
 
@@ -66,7 +66,8 @@
 @line-height-computed:    floor((@font-size-base * @line-height-base)); // ~20px
 
 //** By default, this inherits from the `<body>`.
-@headings-font-family:    inherit;
+// @headings-font-family:    inherit;
+@headings-font-family:    'Chewy', cursive;
 @headings-font-weight:    500;
 @headings-line-height:    1.1;
 @headings-color:          inherit;

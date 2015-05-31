@@ -42,32 +42,6 @@
 						</select>
 					</label>
 				</div>
-	<!-- 			<div class="form-group">
-					<label class="col-xs-6">Characteristics
-						<div class="btn-group" style="width: 100%">
-							<button class="btn btn-default">House Trained</button>
-							<button class="btn btn-default">Declawed</button>
-							<button class="btn btn-default">Special Needs</button>
-						</div>
-					</label>
-					<label class="col-xs-6">Size
-						<div class="btn-group" style="width: 100%">
-							<button class="btn btn-default">S</button>
-							<button class="btn btn-default">M</button>
-							<button class="btn btn-default">L</button>
-							<button class="btn btn-default">XL</button>
-						</div>
-					</label>
-				</div>
-				<div class="form-group">
-					<label class="col-xs-12">My Household Has
-						<div class="btn-group" style="width: 100%">
-							<button class="btn btn-default">Cats</button>
-							<button class="btn btn-default">Dogs</button>
-							<button class="btn btn-default">Young Children</button>
-						</div>
-					</label>
-				</div> -->
 				<button type="submit" class="btn btn-primary" ng-click="search(search_query)">Search</button>
 			</form>
 		</div><!-- /#searchbar_content -->
@@ -75,8 +49,9 @@
 	<div id="results" class="row">
 		<div class='pet' ng-repeat="pet in pets">
 			<div class="well well-sm">
-			<img ng-src="{{pet.photos[0]}}">
-				<h4 class="clearfix"><span ng-bind="pet.name"></span> <small class="pull-right" ng-bind="pet.breed"></small></h4>
+				<img ng-src="{{pet.photos[0]}}" ng-show="pet.photos[0]">
+				<h4 ng-hide="pet.photos[0]" class="no-photo"><span class="glyphicon glyphicon-ban-circle"></span>No Photo Available</h4>
+				<h3 class="clearfix"><span ng-bind="pet.name"></span> <small class="pull-right" ng-bind="pet.breed"></small></h3>
 				<div class="row">
 					<div class="col-xs-6">
 						<p><small>Uber Dist: <b ng-bind='pet.distance'></b><b>m</b>
