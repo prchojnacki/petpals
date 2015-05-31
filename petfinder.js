@@ -97,6 +97,7 @@ function Petfinder () {
 
       petObj.options = petOptions;
       petObj.sex = obj.sex.$t;
+
       return petObj;
     }
   };
@@ -123,8 +124,4 @@ module.exports = pet_finder;
 //   // console.log('PET BY ID', data);
 //   return data;
 // });
-
-
-
-
-
+// end of file

@@ -126,7 +126,10 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 		};
 
 		for (var j = 0; j < shelterIds.length; j++) {
-
+			petFactory.getLocation(function (data) {
+				$scope.location = data;
+				console.log('got location!');
+			});
 		};
 
 		console.log("\n","SCOPE.PETS",$scope.pets);
