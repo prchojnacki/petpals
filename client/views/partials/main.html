@@ -1,166 +1,89 @@
-<div id="search" class="col-xs-12">
-	<div id='location'></div>
+<div id="search">
+<!-- 	<div id='location'></div> -->
 	<div id="searchbar">
 		<div id="searchbar_content">
-		<h3>Search By</h3>
-		<form class="form-horizontal">
-			<div class="form-group">
-				<label class="col-xs-6">
-					Type of Animal
-					<select class="form-control">
-						<option value="any">Pet</option>
-						<option value="dog">Dog</option>
-						<option value="cat">Cat</option>
-						<option value="rabbit">Rabbit</option>
-						<option value="small-furry">Small & Furry</option>
-						<option value="horse">Horse</option>
-						<option value="bird">Bird</option>
-						<option value="scale-fins-others">Scales, Fins, & Others</option>
-						<option value="pig">Pig</option>
-						<option value="barnyard">Barnyard</option>
-					</select>
-				</label>
-				<label class="col-xs-6">
-					Breed
-					<input type="text" class="form-control">
-				</label>
-				<label class="col-xs-6">
-					Age
-					<select class="form-control">
-						<option value="Any">Any</option>
-						<option value="Baby">Baby</option>
-						<option value="Young Adult">Young Adult</option>
-						<option value="Adult">Adult</option>
-						<option value="Senior">Senior</option>
-					</select>
-				</label>
-				<label class="col-xs-6">
-					Gender
-					<select class="form-control">
-						<option value="Any">Either</option>
-						<option value="Male">Male</option>
-						<option value="Female">Female</option>
-					</select>
-				</label>
-			</div>
-			<div class="form-group">
-				<label class="col-xs-6">Characteristics
-					<div class="btn-group" style="width: 100%">
-						<button class="btn btn-default">House Trained</button>
-						<button class="btn btn-default">Declawed</button>
-						<button class="btn btn-default">Special Needs</button>
-					</div>
-				</label>
-				<label class="col-xs-6">Size
-					<div class="btn-group" style="width: 100%">
-						<button class="btn btn-default">S</button>
-						<button class="btn btn-default">M</button>
-						<button class="btn btn-default">L</button>
-						<button class="btn btn-default">XL</button>
-					</div>
-				</label>
-			</div>
-			<div class="form-group">
-				<label class="col-xs-12">My Household Has
-					<div class="btn-group" style="width: 100%">
-						<button class="btn btn-default">Cats</button>
-						<button class="btn btn-default">Dogs</button>
-						<button class="btn btn-default">Young Children</button>
-					</div>
-				</label>
-			</div>
-			<button class="btn-primary">Submit</button>
-		</form>
-		</div>
+			<h3>Search By</h3>
+			<form>
+				<div class="form-group">
+					<label class="col-xs-6">
+						Type of Animal
+						<select class="form-control">
+							<option value="any">Pet</option>
+							<option value="dog">Dog</option>
+							<option value="cat">Cat</option>
+							<option value="rabbit">Rabbit</option>
+							<option value="small-furry">Small & Furry</option>
+							<option value="horse">Horse</option>
+							<option value="bird">Bird</option>
+							<option value="scale-fins-others">Scales, Fins, & Others</option>
+							<option value="pig">Pig</option>
+							<option value="barnyard">Barnyard</option>
+						</select>
+					</label>
+					<label class="col-xs-6">
+						Breed
+						<input type="text" class="form-control">
+					</label>
+					<label class="col-xs-6">
+						Age
+						<select class="form-control">
+							<option value="Any">Any</option>
+							<option value="Baby">Baby</option>
+							<option value="Young Adult">Young Adult</option>
+							<option value="Adult">Adult</option>
+							<option value="Senior">Senior</option>
+						</select>
+					</label>
+					<label class="col-xs-6">
+						Gender
+						<select class="form-control">
+							<option value="Any">Either</option>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>
+					</label>
+				</div>
+	<!-- 			<div class="form-group">
+					<label class="col-xs-6">Characteristics
+						<div class="btn-group" style="width: 100%">
+							<button class="btn btn-default">House Trained</button>
+							<button class="btn btn-default">Declawed</button>
+							<button class="btn btn-default">Special Needs</button>
+						</div>
+					</label>
+					<label class="col-xs-6">Size
+						<div class="btn-group" style="width: 100%">
+							<button class="btn btn-default">S</button>
+							<button class="btn btn-default">M</button>
+							<button class="btn btn-default">L</button>
+							<button class="btn btn-default">XL</button>
+						</div>
+					</label>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12">My Household Has
+						<div class="btn-group" style="width: 100%">
+							<button class="btn btn-default">Cats</button>
+							<button class="btn btn-default">Dogs</button>
+							<button class="btn btn-default">Young Children</button>
+						</div>
+					</label>
+				</div> -->
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div><!-- /#searchbar_content -->
 	</div><!-- /#searbar -->
 	<div id="results" class="row">
 		<div class='pet' ng-repeat="pet in pets">
 			<div class="well well-sm">
-			<img ng-src="{{pet.photos[3]}}">
+			<img ng-src="{{pet.photos[0]}}">
 				<h4 class="clearfix"><span ng-bind="pet.name"></span> <small class="pull-right text-info" ng-bind="pet.breed"></small></h4>
 				<p><small>Distance: <span ng-bind='pet.distance'></span> miles
 				<br>Cost Estimate: <span ng-bind='pet.price'></span></small></p>
-				<p class="text-center"><button class='btn btn-primary btn-sm' type="button" ng-click = "select(pet.id)">Select</button></p>
+				<p class="text-center"><button class='btn btn-primary btn-sm' type="button" data-toggle='modal' data-target = "#confirmation" ng-click = "select(pet.id)">Select</button></p>
 			</div>
 		</div>
-<!-- 		<div class='pet media col-xs-6 col-sm-3'>
-			<div class="media-left">
-				<a><img class="img-responsive media-object" src=""></a>
-			</div>
-			<div class="media-body">
-				<h4 class="media-head">Pet Name Here</h4>
-				<p>Distance: <span ng-bind='distance'></span> miles</p>
-				<p>Estimate to Uber: <span ng-bind='price'></span></p>
-				<button class='btn btn-primary' ng-click='select()'>Select</button>
-			</div>
-		</div>
-		<div class='pet media col-xs-6 col-sm-3'>
-			<div class="media-left">
-				<a><img class="img-responsive media-object" src=""></a>
-			</div>
-			<div class="media-body">
-				<h4 class="media-head">Pet Name Here</h4>
-				<p>Distance: <span ng-bind='distance'></span> miles</p>
-				<p>Estimate to Uber: <span ng-bind='price'></span></p>
-				<button class='btn btn-primary' ng-click='select()'>Select</button>
-			</div>
-		</div>
-		<div class='pet media col-xs-6 col-sm-3'>
-			<div class="media-left">
-				<a><img class="img-responsive media-object" src=""></a>
-			</div>
-			<div class="media-body">
-				<h4 class="media-head">Pet Name Here</h4>
-				<p>Distance: <span ng-bind='distance'></span> miles</p>
-				<p>Estimate to Uber: <span ng-bind='price'></span></p>
-				<button class='btn btn-primary' ng-click='select()'>Select</button>
-			</div>
-		</div>
-		<div class='pet media col-xs-6 col-sm-3'>
-			<div class="media-left">
-				<a><img class="img-responsive media-object" src=""></a>
-			</div>
-			<div class="media-body">
-				<h4 class="media-head">Pet Name Here</h4>
-				<p>Distance: <span ng-bind='distance'></span> miles</p>
-				<p>Estimate to Uber: <span ng-bind='price'></span></p>
-				<button class='btn btn-primary' ng-click='select()'>Select</button>
-			</div>
-		</div>
-		<div class='pet media col-xs-6 col-sm-3'>
-			<div class="media-left">
-				<a><img class="img-responsive media-object" src=""></a>
-			</div>
-			<div class="media-body">
-				<h4 class="media-head">Pet Name Here</h4>
-				<p>Distance: <span ng-bind='distance'></span> miles</p>
-				<p>Estimate to Uber: <span ng-bind='price'></span></p>
-				<button class='btn btn-primary' ng-click='select()'>Select</button>
-			</div>
-		</div>
-		<div class='pet media col-xs-6 col-sm-3'>
-			<div class="media-left">
-				<a><img class="img-responsive media-object" src=""></a>
-			</div>
-			<div class="media-body">
-				<h4 class="media-head">Pet Name Here</h4>
-				<p>Distance: <span ng-bind='distance'></span> miles</p>
-				<p>Estimate to Uber: <span ng-bind='price'></span></p>
-				<button class='btn btn-primary' ng-click='select()'>Select</button>
-			</div>
-		</div>
-		<div class='pet media col-xs-6 col-sm-3'>
-			<div class="media-left">
-				<a><img class="img-responsive media-object" src=""></a>
-			</div>
-			<div class="media-body">
-				<h4 class="media-head">Pet Name Here</h4>
-				<p>Distance: <span ng-bind='distance'></span> miles</p>
-				<p>Estimate to Uber: <span ng-bind='price'></span></p>
-				<button class='btn btn-primary' ng-click='select()'>Select</button>
-			</div>
-		</div>
- -->	</div><!-- /#results -->
+	</div><!-- /#results -->
 </div>
 <!-- Begin Modal HTML code -->
 <div id="confirmation" class="modal fade" tabindex="-1">
@@ -171,19 +94,10 @@
 				<h4 class="modal-title">Confirm Pet</h4>
 			</div>
 			<div class="modal-body">
-				<img class="img-responsive" src="" ng-src="selectedPet.photos[0]">
+				<img class="img-responsive" ng-src="{{selectedPet.photos[0]}}">
 				<div class="row">
-					<div class="col-xs-6 col-sm-3">
-						<a class="thumbnail"><img></a>
-					</div>
-					<div class="col-xs-6 col-sm-3">
-						<a class="thumbnail"><img></a>
-					</div>
-					<div class="col-xs-6 col-sm-3">
-						<a class="thumbnail"><img></a>
-					</div>
-					<div class="col-xs-6 col-sm-3">
-						<a class="thumbnail"><img></a>
+					<div class="col-xs-6 col-sm-3" ng-repeat = 'photo in selectedPet.photos'>
+						<a class="thumbnail"><img ng-src = "{{photo}}"></a>
 					</div>
 				</div>
 				<p>Name: <span class="text-info" ng-bind="selectedPet.name"></span></p>
@@ -196,9 +110,10 @@
 			</div>
 			<div class="modal-footer">
 				<a class='text-danger pull-left' data-dismiss="modal">Close</a>
-				<button class='btn btn-primary' ng-click='request(selectedPet.id)'>Request this pet</button>
+				<button class='btn btn-primary' ng-click='request()'>Request this pet</button>
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 <!-- End Modal HTML Code -->

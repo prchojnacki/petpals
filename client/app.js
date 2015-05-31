@@ -32,7 +32,7 @@ petPals.factory('petFactory', function ($http, $window) {
 	var userLatitude;
 	var userLongitude;
 	var ride;
-	var selectedPetName;
+	var requestedPet;
 	var selectedPet;
 	var pets;
 	var shelters = [];
@@ -64,13 +64,15 @@ petPals.factory('petFactory', function ($http, $window) {
 	factory.getPets = function (specs, callback) {
 		//get and set pets
 		if(specs == '') {
-			var data = {"location": "94022", "count": "8"};
+			var data = {"location": "94022", "count": "4"};
 		}
 		else {
 			var data = { "animal": specs.animal, "breed": specs.breed, "size": specs.size, "sex": specs.sex, "location": "94022", "age" : specs.age, "count" : "8" };
 		}
 		$http({ url: '/petfinder/pets', method: 'GET', params: data }).success(function (output) {
+			// console.log(output);
 			pets = output;
+			console.log(pets);
 			var temp = [];
 			var count = 0;
 			for (pet in output) {
@@ -78,14 +80,14 @@ petPals.factory('petFactory', function ($http, $window) {
 					temp.push(output[pet].shelterId);
 					var data = {"id":output[pet].shelterId};
 					$http({ url: '/petfinder/shelters', method: 'GET', params: data }).success(function (petfinderShelter) {
-						var endLatitude = petfinderShelter.petfinder.shelter.latitude.$t;
-				    	var endLongitude = petfinderShelter.petfinder.shelter.longitude.$t;
-				        var SID = petfinderShelter.petfinder.shelter.id.$t;
-				        console.log("SID", petfinderShelter);
+						var endLatitude = petfinderShelter.latitude;
+				    	var endLongitude = petfinderShelter.longitude;
+				        var SID = petfinderShelter.id;
 				        $http.post('/price', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: endLatitude, end_longitude: endLongitude}).success(function (uberPrice) {
 				        	p = uberPrice.prices[0].estimate;
 				        	d = uberPrice.prices[0].distance;
 							shelters.push({shelterId: SID, price: p, distance: d});
+							
 							count ++;
 							if(count==pets.length-1) {
 								callback(shelters, pets);
@@ -105,14 +107,14 @@ petPals.factory('petFactory', function ($http, $window) {
 		});
 	};
 
-	factory.request = function (callback) {
+	factory.request = function (pet, callback) {
  		$http.get('/auth/isAuthenticated').success(function (output) {
  			if (output == true) {
  				console.log("WOOOT");
- 				$http.post('/request', {start_latitude: startLatitude, start_longitude: startLongitude, end_latitude: userLatitude, end_longitude: userLongitude}).success(function (rideoutput) {
+ 				$http.post('/request', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: pet.latitude, end_longitude: pet.longitude}).success(function (rideoutput) {
  					ride = rideoutput;
- 					//set pet's name selectedPetName =
-					callback(rideoutput, selectedPetName);
+ 					requestedPet = pet;
+					callback(rideoutput);
 				})
  			} else {
  				$window.location.assign('/auth/uber');
@@ -139,6 +141,7 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 	petFactory.getLocation(function (data) {
 		$scope.location = data;
 		petFactory.getPets ("",function (shelters, pets) {
+		// petFactory.getPets ("",function (pets) {
 			$scope.shelters = shelters;
 			$scope.pets = pets;
 			for (var i = 0; i < $scope.pets.length; i++) {
@@ -163,6 +166,8 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 					if ($scope.pets[i].shelterId == $scope.shelters[j].shelterId) {
 						$scope.pets[i].price = $scope.shelters[j].price;
 						$scope.pets[i].distance = $scope.shelters[j].distance;
+						$scope.pets[i].latitude = $scope.shelters[j].latitude;
+						$scope.pets[i].longitude = $scope.shelters[j].longitude;
 					} else {
 						continue;
 					}
@@ -181,7 +186,7 @@ petPals.controller('mainController', function ($scope, petFactory, $window) {
 	}
 
 	$scope.request = function () {
-		petFactory.request(function (data) {
+		petFactory.request($scope.selectedPet, function (data) {
 			console.log('rideoutput',data);
 			$window.location.assign('#/finished');
 		})
