@@ -58,18 +58,18 @@ petPals.factory('petFactory', function ($http, $window) {
 		}
 	}
 
-	factory.getPrice = function (callback) {
+	factory.getPets = function (callback) {
 		//get and set pets
 		for (pet in pets) {
-			//get shelter ID
 			//get shelter location - set endLatitude/endLongitude
-			var endLatitude = 37.294381;
-			var endLongitude = -121.850196;
+			var endLatitude = pets[pet].location.latitude;
+			var endLongitude = pets[pet].location.longitude;
+			//get uber estimate of cost and distance
 			$http.post('/price', {start_latitude: userLatitude, start_longitude: userLongitude, end_latitude: endLatitude, end_longitude: endLongitude}).success(function (output) {
 				pets[pet].price = price.prices[0].estimate;
 				pets[pet].distance = price.prices[0].distance;
 			});
-			callback(output);
+			callback(pets);
 		}
 	}
 
@@ -89,7 +89,7 @@ petPals.factory('petFactory', function ($http, $window) {
 	}
 
 	factory.getRide = function (callback) {
-		callback(ride);
+		callback(ride, selectedPetName);
 	}
 
 	return factory;
@@ -105,6 +105,9 @@ petPals.controller('welcomeController', function ($scope, petFactory, $window) {
 petPals.controller('mainController', function ($scope, petFactory, $window) {
 	petFactory.getLocation(function (data) {
 		$scope.location = data;
+		petFactory.getPets (function (pets) {
+			$scope.pets = pets;
+		})
 	})
 
 	$scope.select = function () {
