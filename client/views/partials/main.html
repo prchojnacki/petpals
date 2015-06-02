@@ -77,7 +77,7 @@
 				<img class="img-responsive" ng-src="{{selectedPet.photos[0]}}">
 				<div class="row">
 					<div class="col-xs-3" ng-repeat = 'photo in selectedPet.photos'>
-						<a class="thumbnail"><img ng-src = "{{photo}}"></a>
+						<a class="thumbnail" ng-click = 'switchPhoto(photo)'><img ng-src = "{{photo}}"></a>
 					</div>
 				</div>
 				<p>Name: <span class="text-info" ng-bind="selectedPet.name"></span></p>

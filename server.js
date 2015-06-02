@@ -38,8 +38,8 @@ app.post('/cars', function(request, response) {
   });
 });
 
+//get Uber price estimates
 app.post('/price', function (request, response) {
-  // console.log('request.body',request.body);
   getRequest('/v1/estimates/price?start_latitude='+request.body.start_latitude+'&start_longitude='+request.body.start_longitude+'&end_latitude='+request.body.end_latitude+'&end_longitude='+request.body.end_longitude, function (err, res) {
     if(err) {
       console.log('err',err);
@@ -51,8 +51,45 @@ app.post('/price', function (request, response) {
   })
 })
 
+//get the user's zip code based on their latitude and longitude
+app.post('/zip', function (request, response) {
+  googleGet (request.body.latitude, request.body.longitude, function (err, res) {
+    if(err) {
+      console.log('err', err);
+      console.log('res', res);
+    }
+    else {
+      response.json(res);
+    }
+  })
+})
 
-// use this for an api get request without oauth
+//helper function to get the user's zip
+function googleGet (latitude, longitude, callback) {
+  var options = {
+    hostname: "maps.googleapis.com",
+    path: "/maps/api/geocode/json?latlng=" + latitude + "," + longitude + "&key=" + config.google_api_key
+  }
+
+  var req = https.request(options, function (res) {
+    var fullRes = ""
+    res.setEncoding('utf8');
+    res.on('readable', function() {
+      var chunk = this.read() || '';
+      fullRes += chunk;
+      console.log('chunk: ' + Buffer.byteLength(chunk) + ' bytes')
+    });
+    res.on('end', function() {
+      callback(null, JSON.parse(fullRes));
+    });
+  });
+  req.end();
+  req.on('error', function (err) {
+    callback(err, null);
+  });
+}
+
+// use this for an api get request without oauth (in our case, the price of an uber ride)
 function getRequest(endpoint, callback) {
   var options = {
     hostname: "sandbox-api.uber.com",
@@ -109,23 +146,9 @@ passport.use(new uberStrategy({
 	}
 ));
 
-// login page
-// app.get('/login', function (request, response) {
-// 	response.render('login');
-// });
-
+//determine if the user has been authenticated already
 app.get('/auth/isAuthenticated', function(req, res) {
-  // console.log(req.isAuthenticated());
-  // if(req.isAuthenticated()) {
-  //   res.send(req.isAuthenticated());
-  // }
-  // else {
-  //   res.redirect('/auth/uber/callback');
-
-  //   // app.get('/auth/uber/callback');
-  // }
   res.send(req.isAuthenticated());
-
 });
 
 // get request to start the whole oauth process with passport
@@ -135,20 +158,14 @@ app.get('/auth/uber',
   )
 );
 
-// authentication callback redirects to /login if authentication failed or home if successful
+// authentication callback redirects to / if authentication failed or main if successful
 app.get('/auth/uber/callback',
 	passport.authenticate('uber', {
 		failureRedirect: '/'
 	}), function(req, res, next) {
-    // res.json({output: true});
-    // res.redirect('/#/finished');
-    return next();
+    res.redirect('/#/main');
   });
 
-// home after the user is authenticated
-// app.get('/', ensureAuthenticated, function (request, response) {
-// 	response.render('index');
-// });
 app.get('/',function(req,res){
   res.sendFile('index.html',{root: __dirname + '/client/'},function(err){
     if(err){
@@ -192,10 +209,10 @@ app.post('/request', ensureAuthenticated, function (request, response) {
 });
 
 // logout
-// app.get('/logout', function (request, response) {
-// 	request.logout();
-// 	response.redirect('/login');
-// });
+app.get('/logout', function (request, response) {
+	request.logout();
+	response.redirect('/');
+});
 
 // route middleware to make sure the request is from an authenticated user
 function ensureAuthenticated (request, response, next) {
@@ -206,8 +223,8 @@ function ensureAuthenticated (request, response, next) {
 	} else {
     response.redirect('/auth/uber/callback')
   }
- //  console.log("Not? authenticated?");
-	// response.redirect('/');
+  console.log("Not authenticated?");
+	response.redirect('#/welcome');
 }
 // use this for an api get request
 function getAuthorizedRequest(endpoint, accessToken, callback) {
